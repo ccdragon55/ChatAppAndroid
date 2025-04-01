@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#FF0000FF</color>
+
+    <color name="bottom_nav_color">#808080</color> <!-- 默认颜色 -->
+    <color name="bottom_nav_selected_color">#FF4081</color> <!-- 选中颜色 -->
+</resources>

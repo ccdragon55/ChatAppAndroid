@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">text</string>
+    <string name="Button1">Button1</string>
+
+    <string name="login_btn">登录</string>
+    <string name="register_btn">注册</string>
+    <string name="login_success">登录成功！</string>
+    <string name="register_success">注册成功！</string>
+
+    <string name="greetingEditText">请输入姓名</string>
+
+    <string name="user_greeting">问候</string>
+    <string name="user_greeting_message">Hello, %s!</string>
+
+    <string name="goto_greetingPage">进入问候界面</string>
+    <string name="goto_loginPage">返回登入界面</string>
+
+
+    <string name="goto_menuTest">进入MenuTest界面</string>
+</resources>
