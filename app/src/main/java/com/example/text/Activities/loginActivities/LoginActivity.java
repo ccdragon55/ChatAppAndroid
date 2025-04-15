@@ -94,45 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //        });
 
-        /**
-         * @Author lsc
-         * <p>get 请求 </p>
-         * @Param [url]
-         * @Return
-         */
-            // 1 获取OkHttpClient对象
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .build();
-            // 2设置请求
-            Request request = new Request.Builder()
-                    .get()
-                    .url("http://10.29.61.159:5050/account/checkcode")
-                    .build();
-            // 3封装call
-            Call call = client.newCall(request);
-            // 4异步调用,并设置回调函数
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    // ...
-                    Log.e("21321","fuckyouFailure");
-                    Log.e("NetworkError", "请求失败: " + e.getMessage());
-                    e.printStackTrace(); // 输出完整堆栈信息
-                }
 
-                @Override
-                public void onResponse(Call call, final Response response) throws IOException {
-                    if (response!=null && response.isSuccessful()){
-                        Log.e("21321","fuckyou");
-                        // ...
-                        // response.body().string();
-                    }
-                }
-            });
-            //同步调用,返回Response,会抛出IO异常
-            //Response response = call.execute();
 
 
         Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
