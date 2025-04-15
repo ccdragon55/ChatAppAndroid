@@ -1,5 +1,6 @@
-package com.example.text;
+package com.example.text.loginActivities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -7,9 +8,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.text.R;
+
 public class RegisterActivity extends AppCompatActivity {
     private EditText etRegUsername, etRegPassword, etConfirmPassword;
-    private Button btnRegister;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -22,9 +24,11 @@ public class RegisterActivity extends AppCompatActivity {
         etRegUsername = findViewById(R.id.etRegUsername);
         etRegPassword = findViewById(R.id.etRegPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        btnRegister = findViewById(R.id.btnRegister);
+        Button btnRegister = findViewById(R.id.btnRegister);
+        Button btnGoLogin = findViewById(R.id.btnGoLogin);
 
         btnRegister.setOnClickListener(v -> attemptRegister());
+        btnGoLogin.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
     }
 
     private void attemptRegister() {

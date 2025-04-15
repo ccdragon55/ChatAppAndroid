@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.MainActivity">
 
 <!--    <TextView-->
 <!--        android:layout_width="wrap_content"-->
@@ -16,50 +16,50 @@
 <!--        app:layout_constraintTop_toTopOf="parent" >-->
 <!--    </TextView>-->
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/gotoGreetingPageBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/goto_greetingPage">
-        </Button>
-        <Button
-            android:id="@+id/gotoMenuTestBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/goto_menuTest">
-        </Button>
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EditText1">
-        </EditText>
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--        <Button-->
+<!--            android:id="@+id/gotoGreetingPageBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/goto_greetingPage">-->
+<!--        </Button>-->
+<!--        <Button-->
+<!--            android:id="@+id/gotoMenuTestBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/goto_menuTest">-->
+<!--        </Button>-->
+<!--        <EditText-->
+<!--            android:id="@+id/editText1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="EditText1">-->
+<!--        </EditText>-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/linearLayout2"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
 
-            <Button
-                android:id="@+id/loginBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login_btn">
-            </Button>
-            <Button
-                android:id="@+id/registerBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/register_btn">
-            </Button>
-        </LinearLayout>
+<!--            <Button-->
+<!--                android:id="@+id/loginBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/login_btn">-->
+<!--            </Button>-->
+<!--            <Button-->
+<!--                android:id="@+id/registerBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/register_btn">-->
+<!--            </Button>-->
+<!--        </LinearLayout>-->
 
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

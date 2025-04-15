@@ -1,7 +1,8 @@
-package com.example.text;
+package com.example.text.chatActivities;
 
 // HomeFragment.java
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.text.GreetingActivity;
+import com.example.text.MainActivity;
+import com.example.text.R;
+import com.example.text.loginActivities.RegisterActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +45,7 @@ import java.util.Map;
 //
 //}
 
-public class HomeFragment extends Fragment {
+public class ChatListFragment extends Fragment {
     private String[] names = new String[]{"wjc", "yy", "tj","wjc", "yy", "tj","wjc", "yy", "tj","wjc", "yy", "tj"};
     private String[] lastChats = new String[]{"我是wjc", "我是yy", "我是tj","我是wjc", "我是yy", "我是tj","我是wjc", "我是yy", "我是tj","我是wjc", "我是yy", "我是tj"};
     private int[] avatars = new int[]{R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
@@ -79,6 +84,39 @@ public class HomeFragment extends Fragment {
 //
 //            }
 //        });
+
+        // 在设置 Adapter 后添加以下代码
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // position 是被点击项的位置（从 0 开始）
+                // 根据 position 获取数据
+                String clickedName = names[position];
+                String clickedLastChat = lastChats[position];
+                int clickedAvatar = avatars[position];
+
+                // 根据需求跳转到不同页面
+                if (clickedName.equals("wjc")) {
+                    // 跳转到页面 A
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra("name", clickedName);
+                    intent.putExtra("avatar", clickedAvatar);
+                    startActivity(intent);
+                } else if (clickedName.equals("yy")) {
+                    // 跳转到页面 B
+                    Intent intent = new Intent(getActivity(), GreetingActivity.class);
+                    intent.putExtra("name", clickedName);
+                    startActivity(intent);
+                } else {
+                    // 默认跳转（例如聊天页面）
+                    Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                    intent.putExtra("name", clickedName);
+                    intent.putExtra("lastChat", clickedLastChat);
+                    startActivity(intent);
+                }
+            }
+        });
+
 //        listView.setOnClickListener(new View.OnClickListener(){
 //            @Override
 //            public void onClick(View view) {

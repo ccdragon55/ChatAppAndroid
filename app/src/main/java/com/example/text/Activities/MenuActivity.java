@@ -8,20 +8,28 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
+import com.example.text.chatActivities.ChatListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.view.MenuItem;
+import android.widget.ImageView;
 
-public class MenuTestActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
+
+    int avater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menutest);
+        setContentView(R.layout.activity_menu);
 
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
         // 默认加载首页
-        loadFragment(new HomeFragment());
+        loadFragment(new ChatListFragment());
+
+        avater=R.mipmap.ic_launcher;
+        ImageView avaterImageView=findViewById(R.id.user_avatar);
+        avaterImageView.setImageResource(avater);
 
         bottomNavigation.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
@@ -29,7 +37,7 @@ public class MenuTestActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 int itemId = item.getItemId();
                 if (itemId == R.id.nav_home) {
-                    fragment = new HomeFragment();
+                    fragment = new ChatListFragment();
                 } else if (itemId == R.id.nav_dashboard) {
                     fragment = new DashboardFragment();
                 } else if (itemId == R.id.nav_notifications) {

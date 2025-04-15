@@ -10,16 +10,7 @@
         android:layout_height="match_parent" />
 
     <!-- 右侧字母索引栏 -->
-<!--    <LinearLayout-->
-<!--        android:id="@+id/side_bar"-->
-<!--        android:layout_width="30dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_centerVertical="true"-->
-<!--        android:gravity="center_horizontal"-->
-<!--        android:orientation="vertical"-->
-<!--        android:paddingVertical="8dp" />-->
-    <com.example.text.views.SideBar
+    <LinearLayout
         android:id="@+id/side_bar"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
@@ -27,7 +18,7 @@
         android:layout_centerVertical="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingVertical="8dp"/>
+        android:paddingVertical="8dp" />
 
     <!-- 中间放大字母提示 -->
     <TextView
@@ -42,15 +33,3 @@
         android:visibility="gone" />
 
 </RelativeLayout>
-
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent">-->
-
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:text="fragment_dashboard"/>-->
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
