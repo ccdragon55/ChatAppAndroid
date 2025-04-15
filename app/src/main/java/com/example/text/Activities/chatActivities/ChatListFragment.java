@@ -1,4 +1,4 @@
-package com.example.text.chatActivities;
+package com.example.text.Activities.chatActivities;
 
 // HomeFragment.java
 
@@ -13,10 +13,11 @@ import android.widget.SimpleAdapter;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.text.GreetingActivity;
-import com.example.text.MainActivity;
+import com.example.text.Activities.GreetingActivity;
+import com.example.text.Activities.MainActivity;
+import com.example.text.Activities.loginActivities.LoginActivity;
+import com.example.text.Activities.loginActivities.RegisterActivity;
 import com.example.text.R;
-import com.example.text.loginActivities.RegisterActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,25 +96,35 @@ public class ChatListFragment extends Fragment {
                 String clickedLastChat = lastChats[position];
                 int clickedAvatar = avatars[position];
 
-                // 根据需求跳转到不同页面
-                if (clickedName.equals("wjc")) {
-                    // 跳转到页面 A
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra("name", clickedName);
-                    intent.putExtra("avatar", clickedAvatar);
-                    startActivity(intent);
-                } else if (clickedName.equals("yy")) {
-                    // 跳转到页面 B
-                    Intent intent = new Intent(getActivity(), GreetingActivity.class);
-                    intent.putExtra("name", clickedName);
-                    startActivity(intent);
-                } else {
-                    // 默认跳转（例如聊天页面）
-                    Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                    intent.putExtra("name", clickedName);
-                    intent.putExtra("lastChat", clickedLastChat);
-                    startActivity(intent);
-                }
+//                // 根据需求跳转到不同页面
+//                if (clickedName.equals("wjc")) {
+//                    // 跳转到页面 A
+//                    Intent intent = new Intent(getActivity(), MainActivity.class);
+//                    intent.putExtra("name", clickedName);
+//                    intent.putExtra("avatar", clickedAvatar);
+//                    startActivity(intent);
+//                } else if (clickedName.equals("yy")) {
+//                    // 跳转到页面 B
+//                    Intent intent = new Intent(getActivity(), GreetingActivity.class);
+//                    intent.putExtra("name", clickedName);
+//                    startActivity(intent);
+//                } else {
+//                    // 默认跳转（例如聊天页面）
+//                    Intent intent = new Intent(getActivity(), RegisterActivity.class);
+//                    intent.putExtra("name", clickedName);
+//                    intent.putExtra("lastChat", clickedLastChat);
+//                    startActivity(intent);
+//                }
+
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+////                intent.putExtra("name", clickedName);
+////                intent.putExtra("lastChat", clickedLastChat);
+//                startActivity(intent);
+
+                Intent intent = new Intent(getActivity(), ChatActivity.class);
+                intent.putExtra("friendName", clickedName);
+//                intent.putExtra("lastChat", clickedLastChat);
+                startActivity(intent);
             }
         });
 

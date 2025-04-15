@@ -1,4 +1,4 @@
-package com.example.text;
+package com.example.text.Activities;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.text.R;
 
 public class GreetingActivity extends AppCompatActivity {
     private Button gotoLoginPageBtn;

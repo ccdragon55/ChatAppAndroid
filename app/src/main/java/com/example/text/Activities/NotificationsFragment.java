@@ -1,4 +1,4 @@
-package com.example.text;
+package com.example.text.Activities;
 
 // HomeFragment.java
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.text.R;
 
 public class NotificationsFragment extends Fragment {
     @Override

@@ -1,16 +1,29 @@
-package com.example.text.loginActivities;
+package com.example.text.Activities.loginActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.text.MenuActivity;
+import com.example.text.Activities.MenuActivity;
 import com.example.text.R;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etUsername, etPassword;
@@ -48,6 +61,79 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
         }
+
+//        OkHttpClient client = new OkHttpClient();
+//        RequestBody requestBody = new FormBody.Builder()
+//                .add("param1", "value1")
+//                .add("param2", "value2")
+//                .build();
+//        Request request = new Request.Builder()
+//                .url("http://10.29.61.159")
+//                .post(requestBody) // 使用上面创建的formBody或jsonBody
+//                .build();
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                // 请求失败处理
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    // 请求成功处理
+//                    final String responseData = response.body().string();
+//                    // 在主线程中更新UI
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // 更新UI的操作
+//                        }
+//                    });
+//                }
+//            }
+//        });
+
+        /**
+         * @Author lsc
+         * <p>get 请求 </p>
+         * @Param [url]
+         * @Return
+         */
+            // 1 获取OkHttpClient对象
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .build();
+            // 2设置请求
+            Request request = new Request.Builder()
+                    .get()
+                    .url("http://10.29.61.159:5050/account/checkcode")
+                    .build();
+            // 3封装call
+            Call call = client.newCall(request);
+            // 4异步调用,并设置回调函数
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    // ...
+                    Log.e("21321","fuckyouFailure");
+                    Log.e("NetworkError", "请求失败: " + e.getMessage());
+                    e.printStackTrace(); // 输出完整堆栈信息
+                }
+
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+                    if (response!=null && response.isSuccessful()){
+                        Log.e("21321","fuckyou");
+                        // ...
+                        // response.body().string();
+                    }
+                }
+            });
+            //同步调用,返回Response,会抛出IO异常
+            //Response response = call.execute();
+
 
         Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
 //        intent.putExtra("name", clickedName);

@@ -1,4 +1,4 @@
-package com.example.text.loginActivities;
+package com.example.text.Activities.loginActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

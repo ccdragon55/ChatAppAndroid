@@ -1,4 +1,4 @@
-package com.example.text;
+package com.example.text.Activities;
 
 // MainActivity.java
 
@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
-import com.example.text.chatActivities.ChatListFragment;
+import com.example.text.R;
+import com.example.text.Activities.chatActivities.ChatListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.view.MenuItem;

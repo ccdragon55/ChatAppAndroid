@@ -1,11 +1,12 @@
-package com.example.text;
+package com.example.text.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.text.loginActivities.LoginActivity;
+import com.example.text.R;
+import com.example.text.Activities.loginActivities.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 //    private Button gotoGreetingPageBtn;
