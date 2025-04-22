@@ -73,4 +73,18 @@ public class UserInfo {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "admin=" + admin +
+                ", contactStatus=" + contactStatus +
+                ", joinType=" + joinType +
+                ", nickName='" + nickName + '\'' +
+                ", personalSignature='" + personalSignature + '\'' +
+                ", sex=" + sex +
+                ", token='" + token + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

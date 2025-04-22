@@ -12,18 +12,26 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.text.Activities.MenuActivity;
+import com.example.text.Apis.ApiService;
 import com.example.text.R;
+import com.example.text.Retrofits.RetrofitClient;
+import com.example.text.dataModel.AvatarRequest;
+import com.example.text.dataModel.AvatarResponse;
+import com.example.text.dataModel.LoginRequest;
+import com.example.text.dataModel.LoginResponse;
+import com.example.text.dataModel.UserInfo;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
@@ -34,77 +42,200 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("userPrefs", MODE_PRIVATE);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
         Button btnGoRegister = findViewById(R.id.btnGoRegister);
 
-
-        findViewById(R.id.btnLogin).setOnClickListener(v -> handleLogin());
-        findViewById(R.id.tvForgotPassword).setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
-        findViewById(R.id.tvRegister).setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
-
-        btnLogin.setOnClickListener(v -> attemptLogin());
+        btnLogin.setOnClickListener(v -> handleLogin());
         btnGoRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 
-    private void attemptLogin() {
-        String username = etUsername.getText().toString().trim();
+    private void handleLogin() {
+        String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "请输入用户名和密码", Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String savedPassword = sharedPreferences.getString(username, "");
-        if (savedPassword.equals(password)) {
-            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
-            // 跳转到主界面
-        } else {
-            Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-        }
+        String encryptedPassword = md5(password);
 
-//        OkHttpClient client = new OkHttpClient();
-//        RequestBody requestBody = new FormBody.Builder()
-//                .add("param1", "value1")
-//                .add("param2", "value2")
-//                .build();
-//        Request request = new Request.Builder()
-//                .url("http://10.29.61.159")
-//                .post(requestBody) // 使用上面创建的formBody或jsonBody
-//                .build();
-//        client.newCall(request).enqueue(new Callback() {
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+        Call<LoginResponse> call = apiService.login(new LoginRequest(email, encryptedPassword));
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    handleLoginSuccess(response.body());
+                } else {
+                    handleError(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void handleLoginSuccess(LoginResponse response) {
+        UserInfo userInfo = response.getData();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Log.e("fk", userInfo.toString() );
+
+        editor.putBoolean("admin", userInfo.getAdmin());
+        editor.putInt("contactStatus", userInfo.getContactStatus()!=null?userInfo.getContactStatus():0);
+        editor.putInt("joinType", userInfo.getJoinType()!=null?userInfo.getJoinType():0);
+        editor.putString("nickName", userInfo.getNickName());
+        editor.putString("personalSignature", userInfo.getPersonalSignature()!=null?userInfo.getPersonalSignature():"");
+        editor.putInt("sex", userInfo.getSex()!=null?userInfo.getSex():0);
+        editor.putString("token", userInfo.getToken());
+        editor.putString("userId", userInfo.getUserId());
+        editor.apply();
+
+        fetchAvatar(userInfo.getUserId());
+        startActivity(new Intent(this, MenuActivity.class));
+    }
+
+    private void fetchAvatar(String userId) {
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+        Call<AvatarResponse> call = apiService.getAvatar(new AvatarRequest(userId));
+
+//        Call<String> call = apiService.getAvatar(new AvatarRequest(userId));
+//        call.enqueue(new Callback<String>() {
 //            @Override
-//            public void onFailure(Call call, IOException e) {
-//                // 请求失败处理
-//                e.printStackTrace();
+//            public void onResponse(Call<String> call, Response<String> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    String avatarUrl = response.body();
+//                    Log.e("fk", response.body() );
+////                    Log.e("fk", avatarUrl!=null?avatarUrl:"avatarNull" );
+//                    sharedPreferences.edit().putString("selfAvatarUrl", avatarUrl).apply();
+//                    saveAvatarLocally(userId, avatarUrl);
+//                }
 //            }
 //
 //            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    // 请求成功处理
-//                    final String responseData = response.body().string();
-//                    // 在主线程中更新UI
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // 更新UI的操作
-//                        }
-//                    });
-//                }
+//            public void onFailure(Call<String> call, Throwable t) {
+//                // 处理错误
 //            }
 //        });
 
+        call.enqueue(new Callback<AvatarResponse>() {
+            @Override
+            public void onResponse(Call<AvatarResponse> call, Response<AvatarResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String avatarUrl = response.body().getData();
+                    Log.e("fk", response.body().toString() );
+//                    Log.e("fk", avatarUrl!=null?avatarUrl:"avatarNull" );
+                    sharedPreferences.edit().putString("selfAvatarUrl", avatarUrl).apply();
+                    saveAvatarLocally(userId, avatarUrl);
+                }
+            }
 
-
-
-        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-//        intent.putExtra("name", clickedName);
-//        intent.putExtra("lastChat", clickedLastChat);
-        startActivity(intent);
+            @Override
+            public void onFailure(Call<AvatarResponse> call, Throwable t) {
+                // 处理错误
+            }
+        });
     }
+
+    private void saveAvatarLocally(String userId, String url) {
+        //TODO
+        // 实现头像下载和本地存储逻辑
+        // 可以使用Glide下载并缓存图片
+    }
+
+    private void handleError(Response<?> response) {
+        try {
+            if (response.errorBody() != null) {
+                String errorBody = response.errorBody().string();
+                JSONObject jsonObject = new JSONObject(errorBody);
+                String errorMessage = jsonObject.getString("info");
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "网络错误", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String md5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//    private void handleLogin() {
+//        String username = etUsername.getText().toString().trim();
+//        String password = etPassword.getText().toString().trim();
+//
+//        if (username.isEmpty() || password.isEmpty()) {
+//            Toast.makeText(this, "请输入用户名和密码", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        String savedPassword = sharedPreferences.getString(username, "");
+//        if (savedPassword.equals(password)) {
+//            Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
+//            // 跳转到主界面
+//        } else {
+//            Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+//        }
+//
+////        OkHttpClient client = new OkHttpClient();
+////        RequestBody requestBody = new FormBody.Builder()
+////                .add("param1", "value1")
+////                .add("param2", "value2")
+////                .build();
+////        Request request = new Request.Builder()
+////                .url("http://10.29.61.159")
+////                .post(requestBody) // 使用上面创建的formBody或jsonBody
+////                .build();
+////        client.newCall(request).enqueue(new Callback() {
+////            @Override
+////            public void onFailure(Call call, IOException e) {
+////                // 请求失败处理
+////                e.printStackTrace();
+////            }
+////
+////            @Override
+////            public void onResponse(Call call, Response response) throws IOException {
+////                if (response.isSuccessful()) {
+////                    // 请求成功处理
+////                    final String responseData = response.body().string();
+////                    // 在主线程中更新UI
+////                    runOnUiThread(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            // 更新UI的操作
+////                        }
+////                    });
+////                }
+////            }
+////        });
+//
+//
+//
+//
+//        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+////        intent.putExtra("name", clickedName);
+////        intent.putExtra("lastChat", clickedLastChat);
+//        startActivity(intent);
+//    }
 }

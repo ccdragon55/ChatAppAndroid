@@ -1,5 +1,9 @@
 package com.example.text.Retrofits;
 
+import static com.example.text.utils.Constants.BASE_URL;
+
+import com.example.text.Apis.ApiConfig;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -13,7 +17,7 @@ public class RetrofitClient {
     public static Retrofit getInstance() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(ApiConfig.BASE_URL)
+                    .baseUrl(ApiConfig.getBaseUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(new OkHttpClient.Builder()
                             .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

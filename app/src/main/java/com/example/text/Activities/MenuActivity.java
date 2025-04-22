@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -121,45 +123,66 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void loadUserAvatar(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient();
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{\"userId\":\"U26271656577\"}");
+        Log.e("fk","loadUserAvatar");
+        // 1. 获取 SharedPreferences（同存入时用的 name）
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
 
-                Request request = new Request.Builder()
-                        .url(Constants.BASE_URL + "/file/getAvatar")
-                        .post(requestBody)
-                        .build();
+        // 2. 取出字符串，第二个参数是默认值
+        String avatarUrl = prefs.getString("selfAvatarUrl", null);
 
-                try {
-                    Response response = client.newCall(request).execute(); // 同步方法
-                    if (response != null && response.isSuccessful()) {
-                        try (ResponseBody body = response.body()) {
-                            if (body != null) {
-                                String responseBody = body.string();
-                                Log.e("123", responseBody);
+        Log.e("fk",avatarUrl!=null?avatarUrl:"avatar null");
 
-                                JSONObject json = new JSONObject(responseBody);
-                                avatarUrl = json.getString("data");
+        if (avatarUrl == null) {
+            Log.d("Avatar", "No avatar URL found");
+        } else {
+            // 如果要更新 UI，要切到主线程
+            runOnUiThread(() -> {
+                Glide.with(MenuActivity.this)
+                        .load(avatarUrl)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(avatar);
+            });
+        }
 
-                                Log.e("123", "avatar: " + avatar);
-
-                                // 如果要更新 UI，要切到主线程
-                                runOnUiThread(() -> {
-                                    Glide.with(MenuActivity.this)
-                                            .load(avatarUrl)
-                                            .apply(RequestOptions.circleCropTransform())
-                                            .into(avatar);
-                                });
-                            }
-                        }
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                OkHttpClient client = new OkHttpClient();
+//                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{\"userId\":\"U26271656577\"}");
+//
+//                Request request = new Request.Builder()
+//                        .url(Constants.BASE_URL + "/file/getAvatar")
+//                        .post(requestBody)
+//                        .build();
+//
+//                try {
+//                    Response response = client.newCall(request).execute(); // 同步方法
+//                    if (response != null && response.isSuccessful()) {
+//                        try (ResponseBody body = response.body()) {
+//                            if (body != null) {
+//                                String responseBody = body.string();
+//                                Log.e("123", responseBody);
+//
+//                                JSONObject json = new JSONObject(responseBody);
+//                                avatarUrl = json.getString("data");
+//
+//                                Log.e("123", "avatar: " + avatar);
+//
+//                                // 如果要更新 UI，要切到主线程
+//                                runOnUiThread(() -> {
+//                                    Glide.with(MenuActivity.this)
+//                                            .load(avatarUrl)
+//                                            .apply(RequestOptions.circleCropTransform())
+//                                            .into(avatar);
+//                                });
+//                            }
+//                        }
+//                    }
+//                } catch (IOException | JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
 
 //        OkHttpClient client = new OkHttpClient();
 //        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{\"userId\":\"U26271656577\"}");

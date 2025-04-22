@@ -1,5 +1,7 @@
 package com.example.text.Apis;
 
+import com.example.text.dataModel.AvatarRequest;
+import com.example.text.dataModel.AvatarResponse;
 import com.example.text.dataModel.LoginRequest;
 import com.example.text.dataModel.LoginResponse;
 
@@ -14,4 +16,5 @@ public interface ApiService {
 
     @POST("/file/getAvatar")
     Call<AvatarResponse> getAvatar(@Body AvatarRequest request);
+//    Call<String> getAvatar(@Body AvatarRequest request);
 }
