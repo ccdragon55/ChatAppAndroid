@@ -17,7 +17,7 @@
 
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.GreetingActivity"
+            android:name=".activities.GreetingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.loginActivities.LoginActivity"
+            android:name=".activities.loginActivities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.loginActivities.RegisterActivity"
+            android:name=".activities.loginActivities.RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,7 +63,7 @@
 <!--            </intent-filter>-->
 <!--        </activity>-->
         <activity
-            android:name=".Activities.MenuActivity"
+            android:name=".activities.MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,7 +72,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.chatActivities.ChatActivity"
+            android:name=".activities.chatActivities.ChatActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -81,7 +81,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.chatActivities.ChatListFragment"
+            android:name=".activities.chatActivities.ChatListFragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -90,7 +90,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.FriendsFragment"
+            android:name=".activities.FriendsFragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -99,7 +99,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.NotificationsFragment"
+            android:name=".activities.NotificationsFragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -108,7 +108,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.ProfileActivities.ProfileActivity"
+            android:name=".activities.profileActivities.ProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -117,7 +117,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.ProfileActivities.FriendProfileActivity"
+            android:name=".activities.profileActivities.FriendProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

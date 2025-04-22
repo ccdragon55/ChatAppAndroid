@@ -24,19 +24,24 @@
                 android:showDividers="middle"
                 android:dividerPadding="8dp">
 
-                <TextView
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="创建群聊"
                     android:textSize="20sp"
                     android:gravity="center" />
-                <TextView
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="加好友/群"
                     android:textSize="20sp"
                     android:gravity="center" />
-                <TextView
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="群聊"
@@ -78,7 +83,9 @@
 
 </RelativeLayout>
 
-<!--<?xml version="1.0" encoding="utf-8"?>-->
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
 <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="match_parent">-->
