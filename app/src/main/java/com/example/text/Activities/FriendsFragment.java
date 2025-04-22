@@ -3,6 +3,7 @@ package com.example.text.Activities;
 // HomeFragment.java
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +13,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.text.Activities.ProfileActivities.FriendProfileActivity;
 import com.example.text.Adapters.FriendListAdapter;
 import com.example.text.R;
 import com.example.text.dataModel.FriendListItem;
 import com.example.text.views.SideBar;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DashboardFragment extends Fragment {
+public class FriendsFragment extends Fragment {
 
     private FriendListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -31,13 +32,21 @@ public class DashboardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
         // 初始化RecyclerView
         RecyclerView rvFriends = rootView.findViewById(R.id.rv_friends);
         mLayoutManager = new LinearLayoutManager(getContext());
         rvFriends.setLayoutManager(mLayoutManager);
 
         mAdapter = new FriendListAdapter(generateData());
+        mAdapter.setOnItemClickListener((view, position) -> {
+            // position 是被点击项的位置（从 0 开始）
+            // 根据 position 获取数据
+            FriendListItem friendListItem= mAdapter.getFriendListItem(position);
+            Intent intent = new Intent(getActivity(), FriendProfileActivity.class);
+            intent.putExtra("friendName", friendListItem.getName());
+            startActivity(intent);
+        });
         rvFriends.setAdapter(mAdapter);
 
         // 侧边栏事件监听
@@ -67,6 +76,9 @@ public class DashboardFragment extends Fragment {
 
     private List<FriendListItem> generateData() {
         List<FriendListItem> list = new ArrayList<>();
+        list.add(new FriendListItem("Alice","http://10.29.61.159:5050/images/2024-11-27/2.png"));
+        list.add(new FriendListItem("Bob","http://10.29.61.159:5050/images/2024-11-27/2.png"));
+        list.add(new FriendListItem("Charlie","http://10.29.61.159:5050/images/2024-11-27/2.png"));
         list.add(new FriendListItem("Alice"));
         list.add(new FriendListItem("Bob"));
         list.add(new FriendListItem("Charlie"));
@@ -85,13 +97,10 @@ public class DashboardFragment extends Fragment {
         list.add(new FriendListItem("Alice"));
         list.add(new FriendListItem("Bob"));
         list.add(new FriendListItem("Charlie"));
-        list.add(new FriendListItem("Alice"));
-        list.add(new FriendListItem("Bob"));
-        list.add(new FriendListItem("Charlie"));
-        list.add(new FriendListItem("王嘉诚"));
-        list.add(new FriendListItem("于洋"));
-        list.add(new FriendListItem("谭杰"));
-        list.add(new FriendListItem("111"));
+        list.add(new FriendListItem("王嘉诚","http://10.29.61.159:5050/images/2024-11-27/2.png"));
+        list.add(new FriendListItem("于洋","http://10.29.61.159:5050/images/2024-11-27/2.png"));
+        list.add(new FriendListItem("谭杰","http://10.29.61.159:5050/images/2024-11-27/2.png"));
+        list.add(new FriendListItem("111","http://10.29.61.159:5050/images/2024-11-27/2.png"));
         list.add(new FriendListItem("222"));
         // 更多数据...
 

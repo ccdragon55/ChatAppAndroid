@@ -50,6 +50,9 @@ dependencies {
     implementation("com.github.promeg:tinypinyin:2.0.3")
 //    implementation 'com.github.promeg:tinypinyin:2.0.3'
 
+    implementation("com.github.bumptech.glide:glide:4.16.0") // 使用最新版本
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0") // 如果需要注解处理
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

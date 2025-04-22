@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 可滚动内容容器 -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 顶部选项区域 -->
+            <LinearLayout
+                android:id="@+id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:divider="@drawable/divider_line_grey"
+                android:showDividers="middle"
+                android:dividerPadding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="创建群聊"
+                    android:textSize="20sp"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="加好友/群"
+                    android:textSize="20sp"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="群聊"
+                    android:textSize="20sp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- 好友列表 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_friends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 右侧字母索引栏 -->
+    <com.example.text.views.SideBar
+        android:id="@+id/side_bar"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingVertical="8dp" />
+
+    <!-- 中间放大字母提示 -->
+    <TextView
+        android:id="@+id/tv_letter_hint"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:background="#66000000"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:scrollbars="vertical">-->
+
+<!--        &lt;!&ndash; 顶部选项区域 &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/header_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:divider="@drawable/divider_line_grey"-->
+<!--            android:showDividers="middle"-->
+<!--            android:dividerPadding="8dp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="创建群聊"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="加好友/群"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="群聊"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash; 好友列表（RecyclerView 位于 header_layout 下面） &ndash;&gt;-->
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rv_friends"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_below="@id/header_layout" />-->
+<!--    </LinearLayout>-->
+
+
+<!--    &lt;!&ndash; 右侧字母索引栏 &ndash;&gt;-->
+<!--    <com.example.text.views.SideBar-->
+<!--        android:id="@+id/side_bar"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingVertical="8dp" />-->
+
+<!--    &lt;!&ndash; 中间放大字母提示 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_letter_hint"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:background="#66000000"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="30sp"-->
+<!--        android:visibility="gone" />-->
+
+<!--</RelativeLayout>-->
+
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    &lt;!&ndash; AppBarLayout 用于放置顶部的滚动区域 &ndash;&gt;-->
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/header_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:divider="@drawable/divider_line_grey"-->
+<!--            android:showDividers="middle"-->
+<!--            android:dividerPadding="8dp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="创建群聊"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="加好友/群"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="群聊"-->
+<!--                android:textSize="20sp"-->
+<!--                android:gravity="center" />-->
+<!--        </LinearLayout>-->
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--    &lt;!&ndash; 滚动列表，同时滚动 AppBarLayout &ndash;&gt;-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rv_friends"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+<!--    &lt;!&ndash; 右侧字母索引栏 &ndash;&gt;-->
+<!--    <com.example.text.views.SideBar-->
+<!--        android:id="@+id/side_bar"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingVertical="8dp" />-->
+
+<!--    &lt;!&ndash; 中间放大字母提示 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_letter_hint"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:background="#66000000"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="30sp"-->
+<!--        android:visibility="gone" />-->
+
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:divider="@color/black">-->
+
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="创建群聊"-->
+<!--            android:textSize="20sp"-->
+<!--            android:gravity="center"/>-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="加好友/群"-->
+<!--            android:textSize="20sp"-->
+<!--            android:gravity="center"/>-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="群聊"-->
+<!--            android:textSize="20sp"-->
+<!--            android:gravity="center"/>-->
+
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; 好友列表 &ndash;&gt;-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rv_friends"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
+
+<!--    &lt;!&ndash; 右侧字母索引栏 &ndash;&gt;-->
+<!--&lt;!&ndash;    <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;        android:id="@+id/side_bar"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_width="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_alignParentEnd="true"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_centerVertical="true"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:gravity="center_horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:orientation="vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:paddingVertical="8dp" />&ndash;&gt;-->
+<!--    <com.example.text.views.SideBar-->
+<!--        android:id="@+id/side_bar"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:orientation="vertical"-->
+<!--        android:paddingVertical="8dp"/>-->
+
+<!--    &lt;!&ndash; 中间放大字母提示 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_letter_hint"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:background="#66000000"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="30sp"-->
+<!--        android:visibility="gone" />-->
+
+<!--</RelativeLayout>-->
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="fragment_dashboard"/>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

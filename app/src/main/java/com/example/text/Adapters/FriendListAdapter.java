@@ -3,11 +3,15 @@ package com.example.text.Adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.text.Listeners.OnItemClickListener;
 import com.example.text.R;
 import com.example.text.dataModel.FriendListItem;
 
@@ -25,9 +29,15 @@ public class FriendListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Object> mData = new ArrayList<>();
     private Map<String, Integer> mLetterPositions = new HashMap<>();
 
+    private OnItemClickListener mOnItemClickListener;
+
     // 构造函数需要处理原始数据
     public FriendListAdapter(List<FriendListItem> friends) {
         processData(friends);
+    }
+
+    public FriendListItem getFriendListItem(int pos) {
+        return (FriendListItem)mData.get(pos);
     }
 
     //================ 必须实现的方法 ================//
@@ -85,7 +95,18 @@ public class FriendListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             FriendListItem friend = (FriendListItem) mData.get(position);
             ((ItemViewHolder) holder).bind(friend);
+
+            // 👇 添加点击事件绑定
+            holder.itemView.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, holder.getAdapterPosition());
+                }
+            });
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 
     //================ ViewHolder 定义 ================//
@@ -103,15 +124,21 @@ public class FriendListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivAvatar;
         TextView tvName;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_name);
+            ivAvatar = itemView.findViewById(R.id.iv_avatar);
         }
 
         void bind(FriendListItem friend) {
             tvName.setText(friend.getName());
+            Glide.with(ivAvatar.getContext())
+                    .load(friend.getAvatar())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(ivAvatar);
         }
     }
 }

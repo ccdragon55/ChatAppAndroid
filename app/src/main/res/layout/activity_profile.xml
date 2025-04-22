@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp">
+
+    <!-- 顶部栏 -->
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="返回" />
+
+        <TextView
+            android:id="@+id/chat_TextView_useName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxEms="10"
+            android:maxLines="1"
+            android:paddingStart="20dp"
+            android:paddingRight="56dp"
+            android:text="个人主页"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingVertical="8dp"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:divider="@drawable/divider_space"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:contentDescription="用户头像"
+                android:elevation="4dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
+                app:strokeColor="@color/primary_light"
+                app:strokeWidth="2dp"
+                android:layout_marginStart="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/iv_avatar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="10dp"
+                    tools:text="小明同学"/>
+
+                <TextView
+                    android:id="@+id/tv_userId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    tools:text="ID: U26271656577"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="20dp"
+                tools:text="性别:"/>
+
+            <TextView
+                android:id="@+id/tv_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="20dp"
+                tools:text="男"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="20dp"
+                tools:text="邮箱:"/>
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="20dp"
+                tools:text="user@example.com"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="20dp"
+                tools:text="个性签名:"/>
+
+            <TextView
+                android:id="@+id/tv_signature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/text_primary"
+                android:layout_marginStart="20dp"
+                tools:text="生活不止眼前的苟且，还有诗和远方~"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp"
+        android:paddingHorizontal="24dp"
+        android:spacing="30dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_changeProfile"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="修改个人信息"
+            android:textColor="@color/primary_color"
+            app:cornerRadius="24dp"
+            app:iconTint="@color/primary_color"
+            app:strokeColor="@color/primary_color"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:padding="16dp"-->
+<!--    android:background="@color/light_gray"> &lt;!&ndash; 添加浅色背景提升层次感 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; 返回按钮 - 使用 Material 风格 &ndash;&gt;-->
+<!--    <ImageButton-->
+<!--        android:id="@+id/btn_back"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:src="@drawable/ic_arrow_back"-->
+<!--        android:contentDescription="返回"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:shapeAppearanceOverlay="@style/CircleImageView"-->
+<!--        android:elevation="2dp"-->
+<!--        app:tint="@color/primary_color"/>-->
+
+<!--    &lt;!&ndash; 用户头像 - 圆形带边框 &ndash;&gt;-->
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_avatar"-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_height="120dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btn_back"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        app:shapeAppearanceOverlay="@style/CircleImageView"-->
+<!--        android:elevation="4dp"-->
+<!--        app:strokeColor="@color/primary_light"-->
+<!--        app:strokeWidth="2dp"-->
+<!--        android:contentDescription="用户头像"/>-->
+
+<!--    &lt;!&ndash; 昵称 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_username"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textColor="@color/text_primary"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/iv_avatar"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        tools:text="小明同学"/>-->
+
+<!--    &lt;!&ndash; ID - 增加图标和更柔和的颜色 &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center_vertical"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_username"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="8dp">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_userId"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/text_secondary"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            tools:text="ID: U26271656577"/>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; 性别和邮箱横向排列 &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_userId"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:paddingHorizontal="24dp"-->
+<!--        tools:ignore="NotSibling">-->
+
+<!--        &lt;!&ndash; 性别 &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center_vertical">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_gender"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/text_secondary"-->
+<!--                android:layout_marginStart="4dp"-->
+<!--                tools:text="男"/>-->
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash; 邮箱 &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center_vertical">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_email"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/text_secondary"-->
+<!--                android:layout_marginStart="4dp"-->
+<!--                tools:text="user@example.com"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; 个性签名 - 卡片式设计 &ndash;&gt;-->
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_gender"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginHorizontal="24dp"-->
+<!--        app:cardElevation="2dp"-->
+<!--        app:cardBackgroundColor="@color/card_background"-->
+<!--        app:shapeAppearance="@style/RoundedCorner"-->
+<!--        android:padding="16dp"-->
+<!--        tools:ignore="NotSibling">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_signature"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="@color/text_primary"-->
+<!--            android:gravity="center"-->
+<!--            tools:text="生活不止眼前的苟且，还有诗和远方~"/>-->
+<!--    </com.google.android.material.card.MaterialCardView>-->
+
+<!--    &lt;!&ndash; 操作按钮 - Material 风格 &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginBottom="24dp"-->
+<!--        android:paddingHorizontal="24dp"-->
+<!--        android:spacing="16dp">-->
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btn_sendMessage"-->
+<!--            style="@style/Widget.Material3.Button.OutlinedButton"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="发消息"-->
+<!--            android:textColor="@color/primary_color"-->
+<!--            app:iconTint="@color/primary_color"-->
+<!--            app:strokeColor="@color/primary_color"-->
+<!--            app:cornerRadius="24dp"/>-->
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btn_deleteFriend"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="删除好友"-->
+<!--            android:textColor="@color/white"-->
+<!--            app:iconTint="@color/white"-->
+<!--            app:backgroundTint="@color/error_color"-->
+<!--            app:cornerRadius="24dp"/>-->
+<!--    </LinearLayout>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:padding="16dp">-->
+
+<!--    &lt;!&ndash; 返回按钮 &ndash;&gt;-->
+<!--    <ImageButton-->
+<!--        android:id="@+id/btn_back"-->
+<!--        android:layout_width="36dp"-->
+<!--        android:layout_height="36dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:src="@drawable/ic_arrow_back"-->
+<!--        android:contentDescription="返回"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"/>-->
+
+<!--    &lt;!&ndash; 用户头像 &ndash;&gt;-->
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_avatar"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/btn_back"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="16dp"/>-->
+
+<!--    &lt;!&ndash; 昵称 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_username"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/iv_avatar"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="16dp"/>-->
+
+<!--    &lt;!&ndash; ID &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_userId"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_username"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="8dp"/>-->
+
+<!--    &lt;!&ndash; 性别 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_gender"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_userId"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:layout_marginTop="8dp"/>-->
+
+<!--    &lt;!&ndash; 邮箱 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_email"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_userId"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="8dp"/>-->
+
+<!--    &lt;!&ndash; 个性签名 &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_signature"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_gender"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:gravity="center" />-->
+
+<!--    &lt;!&ndash; 发送消息按钮 &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_sendMessage"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="发送消息"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_signature"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/btn_deleteFriend"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintHorizontal_weight="1"/>-->
+
+<!--    &lt;!&ndash; 删除好友按钮 &ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_deleteFriend"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="删除好友"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_signature"-->
+<!--        app:layout_constraintStart_toEndOf="@id/btn_sendMessage"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        app:layout_constraintHorizontal_weight="1"/>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

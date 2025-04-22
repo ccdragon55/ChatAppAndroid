@@ -16,6 +16,8 @@ public class FriendListItem {
     private String name;
     private String firstLetter; // 首字母
 
+    private String avatar; // 首字母
+
     public FriendListItem(String name){
         this.name=name;
         if (TextUtils.isEmpty(name)) {
@@ -36,6 +38,27 @@ public class FriendListItem {
         Log.i(TAG, "firstLetter: "+firstLetter);
     }
 
+    public FriendListItem(String name,String avatar){
+        this.name=name;
+        if (TextUtils.isEmpty(name)) {
+            firstLetter="#";
+            return;
+        }
+        char firstChar = name.charAt(0);
+//        if (Character.isLetter(firstChar)) {
+        if (('A'<=firstChar&&firstChar<='Z')||('a'<=firstChar&&firstChar<='z')) {
+            Log.i(TAG, "isLetter: ");
+            firstLetter=String.valueOf(Character.toUpperCase(firstChar));
+        } else {
+            String pinyin = Pinyin.toPinyin(firstChar);
+            Log.i(TAG, "notLetter: "+pinyin);
+            firstLetter=pinyin.isEmpty()||pinyin.charAt(0)<'A'||'Z'<pinyin.charAt(0) ? "#" : pinyin.substring(0, 1);
+        }
+        Log.i(TAG, "name: "+name);
+        Log.i(TAG, "firstLetter: "+firstLetter);
+        this.avatar=avatar;
+    }
+
     public String getName() {
         return name;
     }
@@ -43,6 +66,8 @@ public class FriendListItem {
     public String getFirstLetter() {
         return firstLetter;
     }
+
+    public String getAvatar() {return avatar;}
 
     public static void sortByFiestLetter(List<FriendListItem> list){
         Collections.sort(list, (f1, f2) ->{

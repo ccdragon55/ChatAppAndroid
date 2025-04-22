@@ -10,4 +10,13 @@
 
     <color name="input_stroke">#2196F3</color>
     <color name="input_hint">#757575</color>
+
+    <color name="grey">#808080</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="primary_color">#2196F3</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="error_color">#F44336</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="card_background">#FFFFFF</color>
 </resources>
