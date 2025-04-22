@@ -26,7 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText etUsername, etPassword;
+    private EditText etEmail, etPassword;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -36,10 +36,15 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
 
-        etUsername = findViewById(R.id.etUsername);
+        etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
         Button btnGoRegister = findViewById(R.id.btnGoRegister);
+
+
+        findViewById(R.id.btnLogin).setOnClickListener(v -> handleLogin());
+        findViewById(R.id.tvForgotPassword).setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
+        findViewById(R.id.tvRegister).setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
 
         btnLogin.setOnClickListener(v -> attemptLogin());
         btnGoRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
