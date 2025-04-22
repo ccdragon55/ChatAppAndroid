@@ -46,6 +46,11 @@ dependencies {
     // OkHttp 日志拦截器（可选，用于调试）
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
+    implementation("com.github.bumptech.glide:glide:4.16.0") // 使用最新版本
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0") // 如果需要注解处理
+
+
+
     // 使用TinyPinyin库处理中文转拼音
     implementation("com.github.promeg:tinypinyin:2.0.3")
 //    implementation 'com.github.promeg:tinypinyin:2.0.3'
