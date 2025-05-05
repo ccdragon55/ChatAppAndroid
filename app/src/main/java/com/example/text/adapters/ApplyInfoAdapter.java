@@ -48,6 +48,14 @@ public class ApplyInfoAdapter extends RecyclerView.Adapter<ApplyInfoAdapter.View
         this.actionListener = listener;
     }
 
+    // 更新指定项的状态
+    public void updateRequestStatus(int position, int status) {
+        if (position >= 0 && position < requests.size()) {
+            requests.get(position).setStatus(status);
+            notifyItemChanged(position);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
