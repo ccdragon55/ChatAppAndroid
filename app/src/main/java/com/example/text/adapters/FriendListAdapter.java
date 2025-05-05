@@ -134,9 +134,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         void bind(FriendListItem friend) {
-            tvName.setText(friend.getName());
+            tvName.setText(friend.getContactName());
             Glide.with(ivAvatar.getContext())
-                    .load(friend.getAvatar())
+                    .load(friend.getAvatarUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(ivAvatar);
         }

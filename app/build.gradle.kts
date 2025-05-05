@@ -41,11 +41,14 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
+//    implementation("androidx.recyclerview:recyclerview:1.2.1") // 列表
+
     // Retrofit 核心库
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // Retrofit 的 Gson 转换器（用于 JSON 解析）
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.code.gson:gson:2.8.9") // Gson 示例
 
     // OkHttp 核心库（Retrofit 底层依赖）
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
@@ -56,6 +59,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0") // 使用最新版本
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0") // 如果需要注解处理
 
+//    implementation ("org.json:json:20230227")
 
 
     // 使用TinyPinyin库处理中文转拼音

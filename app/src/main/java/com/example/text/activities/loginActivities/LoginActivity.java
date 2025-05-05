@@ -2,23 +2,28 @@ package com.example.text.activities.loginActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.text.activities.MenuActivity;
 import com.example.text.apis.ApiService;
 import com.example.text.R;
+import com.example.text.database.AvatarModel;
 import com.example.text.retrofits.RetrofitClient;
-import com.example.text.dataModel.request.AvatarRequest;
+import com.example.text.dataModel.request.UserIdRequest;
 import com.example.text.dataModel.response.AvatarResponse;
 import com.example.text.dataModel.request.LoginRequest;
 import com.example.text.dataModel.response.LoginResponse;
 import com.example.text.dataModel.UserInfo;
+import com.example.text.services.WebSocketService;
+import com.example.text.utils.Store;
 
 import org.json.JSONObject;
 
@@ -55,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请输入邮箱和密码", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -65,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         Call<LoginResponse> call = apiService.login(new LoginRequest(email, encryptedPassword));
         call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     handleLoginSuccess(response.body());
                 } else {
@@ -74,8 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
+                Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -96,13 +101,19 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("userId", userInfo.getUserId());
         editor.apply();
 
+        Store.getInstance(getApplicationContext()).initUserId(userInfo.getUserId());
+        Store.getInstance(getApplicationContext()).setData("token",userInfo.getToken());
+
         fetchAvatar(userInfo.getUserId());
+
+        startWebSocketService();
+
         startActivity(new Intent(this, MenuActivity.class));
     }
 
     private void fetchAvatar(String userId) {
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        Call<AvatarResponse> call = apiService.getAvatar(new AvatarRequest(userId));
+        Call<AvatarResponse> call = apiService.getAvatar(new UserIdRequest(userId));
 
 //        Call<String> call = apiService.getAvatar(new AvatarRequest(userId));
 //        call.enqueue(new Callback<String>() {
@@ -125,19 +136,23 @@ public class LoginActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<AvatarResponse>() {
             @Override
-            public void onResponse(Call<AvatarResponse> call, Response<AvatarResponse> response) {
+            public void onResponse(@NonNull Call<AvatarResponse> call, @NonNull Response<AvatarResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String avatarUrl = response.body().getData();
                     Log.e("fk", response.body().toString() );
 //                    Log.e("fk", avatarUrl!=null?avatarUrl:"avatarNull" );
                     sharedPreferences.edit().putString("selfAvatarUrl", avatarUrl).apply();
                     saveAvatarLocally(userId, avatarUrl);
+
+                    AvatarModel avatarModel=new AvatarModel(getApplicationContext());
+                    avatarModel.saveAvatar(Store.getInstance(getApplicationContext()).getUserId(),Store.getInstance(getApplicationContext()).getData("token"));
                 }
             }
 
             @Override
-            public void onFailure(Call<AvatarResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<AvatarResponse> call, @NonNull Throwable t) {
                 // 处理错误
+                Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -175,6 +190,18 @@ public class LoginActivity extends AppCompatActivity {
             return hashtext;
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void startWebSocketService() {
+        Intent serviceIntent = new Intent(this, WebSocketService.class);
+//        serviceIntent.putExtra("token", getAuthToken());
+
+        // Android 8.0+ 必须使用 startForegroundService
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
         }
     }
 

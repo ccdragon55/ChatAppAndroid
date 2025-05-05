@@ -206,6 +206,20 @@
             android:layout_marginEnd="10dp"
             android:gravity="center"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_changePassword"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="修改密码"
+            android:textColor="@color/primary_color"
+            app:cornerRadius="24dp"
+            app:iconTint="@color/primary_color"
+            app:strokeColor="@color/primary_color"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

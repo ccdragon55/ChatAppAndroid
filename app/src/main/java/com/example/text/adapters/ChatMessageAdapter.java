@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.text.R;
 import com.example.text.dataModel.ChatMessage;
+import com.example.text.utils.Store;
 
 import java.util.List;
 
@@ -47,11 +48,11 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ChatMessage message = messageList.get(position);
         if (holder instanceof LeftViewHolder) {
-            ((LeftViewHolder) holder).tvContent.setText(message.getContent());
-            ((LeftViewHolder) holder).tvNickName.setText(message.getSender());
+            ((LeftViewHolder) holder).tvContent.setText(message.getMessageContent());
+            ((LeftViewHolder) holder).tvNickName.setText(message.getSendUserNickName());
         } else if (holder instanceof RightViewHolder) {
-            ((RightViewHolder) holder).tvContent.setText(message.getContent());
-            ((RightViewHolder) holder).tvNickName.setText(message.getSender());
+            ((RightViewHolder) holder).tvContent.setText(message.getMessageContent());
+            ((RightViewHolder) holder).tvNickName.setText(message.getSendUserNickName());
         }
     }
 

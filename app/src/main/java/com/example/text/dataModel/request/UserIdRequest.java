@@ -1,9 +1,9 @@
 package com.example.text.dataModel.request;
 
-public class AvatarRequest {
+public class UserIdRequest {
     private String userId;
 
-    public AvatarRequest(String userId){
+    public UserIdRequest(String userId){
         this.userId=userId;
     }
 }

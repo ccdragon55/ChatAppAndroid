@@ -25,6 +25,7 @@
                 android:dividerPadding="8dp">
 
                 <Button
+                    android:id="@+id/btn_createGroup"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -33,6 +34,7 @@
                     android:gravity="center" />
 
                 <Button
+                    android:id="@+id/btn_addFriend"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,6 +43,7 @@
                     android:gravity="center" />
 
                 <Button
+                    android:id="@+id/btn_groupList"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,21 +1,25 @@
 package com.example.text.activities.friendActivities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.text.activities.loginActivities.LoginActivity;
+import com.example.text.activities.profileActivities.FriendProfileActivity;
 import com.example.text.adapters.FriendListAdapter;
-import com.example.text.apis.ApiService;
 import com.example.text.R;
-import com.example.text.retrofits.RetrofitClient;
+import com.example.text.apis.ApiService;
 import com.example.text.dataModel.FriendListItem;
-import com.example.text.dataModel.request.LoginRequest;
-import com.example.text.dataModel.response.LoginResponse;
+import com.example.text.dataModel.request.UserIdRequest;
+import com.example.text.dataModel.response.FetchApplyInfoResponse;
+import com.example.text.dataModel.response.FetchContactsResponse;
+import com.example.text.retrofits.RetrofitClient;
+import com.example.text.utils.Store;
 import com.example.text.views.SideBar;
 
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ public class FriendListActivity extends AppCompatActivity {
     private FriendListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private Map<String, Integer> mLetterPositions = new HashMap<>();
+    private List<FriendListItem> friendList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,19 @@ public class FriendListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         rvFriends.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FriendListAdapter(generateData());
+        friendList=new ArrayList<>();
+        fetchContacts();
+
+//        mAdapter = new FriendListAdapter(generateData());
+        mAdapter = new FriendListAdapter(friendList);
+        mAdapter.setOnItemClickListener((view, position) -> {
+            // position 是被点击项的位置（从 0 开始）
+            // 根据 position 获取数据
+            FriendListItem friendListItem= friendList.get(position);
+            Intent intent = new Intent(this, FriendProfileActivity.class);
+            intent.putExtra("friendId", friendListItem.getContactId());
+            startActivity(intent);
+        });
         rvFriends.setAdapter(mAdapter);
 
         // 侧边栏事件监听
@@ -67,6 +84,28 @@ public class FriendListActivity extends AppCompatActivity {
             public void onLetterReleased() {
                 // 隐藏提示字母
 //                tvLetterHint.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void fetchContacts(){
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+        Call<FetchContactsResponse> call = apiService.getContact(Store.getInstance(getApplicationContext()).getData("token"));
+
+        call.enqueue(new Callback<FetchContactsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<FetchContactsResponse> call, @NonNull Response<FetchContactsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    friendList = response.body().getData();
+                    FriendListItem.sortByFiestLetter(friendList);
+                } else {
+                    Toast.makeText(FriendListActivity.this, "网络错误: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FetchContactsResponse> call, @NonNull Throwable t) {
+                Toast.makeText(FriendListActivity.this, "网络错误: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

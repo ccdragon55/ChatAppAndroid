@@ -73,10 +73,10 @@ public class SessionListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         void bind(SessionListItem session) {
             Glide.with(ivAvatar.getContext())
-                    .load(session.getAvatar())
+                    .load(session.getUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(ivAvatar);
-            tvName.setText(session.getName());
+            tvName.setText(session.getContactName());
             tvLastMessage.setText(session.getLastMessage());
         }
     }

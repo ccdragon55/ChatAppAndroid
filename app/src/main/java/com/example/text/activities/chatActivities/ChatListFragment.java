@@ -1,45 +1,154 @@
 package com.example.text.activities.chatActivities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.text.adapters.SessionListAdapter;
 import com.example.text.R;
+import com.example.text.dataModel.ChatSession;
 import com.example.text.dataModel.SessionListItem;
+import com.example.text.database.ChatSessionModel;
+import com.example.text.utils.JsonUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ChatListFragment extends Fragment {
     private RecyclerView recyclerView;
     private SessionListAdapter adapter;
     private List<SessionListItem> sessionList = new ArrayList<>();
+    private final ChatSessionModel chatSessionModel=new ChatSessionModel(requireActivity().getApplicationContext());
+
+    private BroadcastReceiver wsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            String json = intent.getStringExtra("dataJson"); // 公共字段
+
+            try {
+                // 根据 Action 分发不同逻辑
+                if (action == null) return;
+
+                switch (action) {
+                    case "ACTION_WS_receiveMessage":
+                        handleReceiveMessage(json);
+                        break;
+                    case "ACTION_WS_receiveSingleMessageUpdateChatSession":
+                        handleReceiveSingleMessageUpdateChatSession(json);
+                        break;
+                    case "ACTION_WS_MESSAGE_RECEIVED":
+                        handleMessageReceived(json);
+                        break;
+                    default:
+                        // 未知 Action 处理
+                        break;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private void handleReceiveMessage(String json) throws JSONException {
+            JSONObject jsonObject=new JSONObject(json);
+            Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
+            Object object=message.get("messageType");
+            int messageType=object instanceof Integer?(int)object:-1;
+            if(messageType==0){
+                loadChatSession();
+            }
+        }
+
+        private void handleReceiveSingleMessageUpdateChatSession(String json) throws JSONException {
+            JSONObject jsonObject=new JSONObject(json);
+            Map<String,Object> data= JsonUtils.jsonToStrObjMap(jsonObject);
+
+            String newChatSessionId = (String)data.get("sessionId");
+            chatSessionModel.updateNoReadCount((String)data.get("contactId"),1);
+
+            boolean flag = true;
+            for (int i = 0; i < sessionList.size(); ++i) {
+                if (Objects.equals(sessionList.get(i).getSessionId(), newChatSessionId)) {
+                    sessionList.get(i).setLastMessage((String)data.get("lastMessage"));
+                    sessionList.get(i).setLastReceiveTime((long)data.get("lastReceiveTime"));
+                    sessionList.get(i).addNoReadCount();
+                    flag = false;
+                }
+            }
+            if (flag) {
+                //该会话之前被删除
+                SessionListItem sessionListItem=new SessionListItem(data);
+                sessionListItem.addNoReadCount();
+                sessionList.add(sessionListItem);
+            }
+            SessionListItem.sortByLastReceiveTime(sessionList);
+        }
+
+        private void handleOrderCreated(String json) {
+            // 解析并处理订单创建逻辑
+        }
+
+        private void handleMessageReceived(String json) {
+            // 解析并处理消息接收逻辑
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("ACTION_WS_receiveMessage");
+        filter.addAction("ACTION_WS_receiveSingleMessageUpdateChatSession");
+        filter.addAction("ACTION_WS_MESSAGE_RECEIVED");
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(wsReceiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(wsReceiver);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 1. 加载 Fragment 的布局
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+
+
         // 初始化 RecyclerView
         recyclerView = rootView.findViewById(R.id.rv_sessionList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        sessionList=generateData();
+//        sessionList=generateData();
         adapter = new SessionListAdapter(sessionList);
         adapter.setOnItemClickListener((view, position) -> {
             // position 是被点击项的位置（从 0 开始）
             // 根据 position 获取数据
             SessionListItem sessionListItem= sessionList.get(position);
             Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra("friendName", sessionListItem.getName());
+//            intent.putExtra("friendName", sessionListItem.getContactName());
+            intent.putExtra("userId", sessionListItem.getUserId());
+            intent.putExtra("sessionId", sessionListItem.getSessionId());
+            intent.putExtra("contactId", sessionListItem.getContactID());
+            intent.putExtra("sendUserNickName", sessionListItem.getContactName());
+            intent.putExtra("contactType", sessionListItem.getContactType());
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
@@ -47,29 +156,38 @@ public class ChatListFragment extends Fragment {
         return rootView;
     }
 
-    private List<SessionListItem> generateData() {
-        List<SessionListItem> list = new ArrayList<>();
-        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
-        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
-        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
-        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
-        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
-        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
-        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
-        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
-        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
-        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
-        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
-        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
-        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
-        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
-        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
-        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
-        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
-        list.add(new SessionListItem("tj","","我是tj",3156));
+//    private List<SessionListItem> generateData() {
+//        List<SessionListItem> list = new ArrayList<>();
+//        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
+//        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
+//        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
+//        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
+//        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
+//        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
+//        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
+//        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
+//        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
+//        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
+//        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
+//        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
+//        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
+//        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
+//        list.add(new SessionListItem("tj","http://10.29.61.159:5050/images/2024-11-27/2.png","我是tj",3156));
+//        list.add(new SessionListItem("wjc","http://10.29.61.159:5050/images/2024-11-27/2.png","我是wjc",1354689131));
+//        list.add(new SessionListItem("yy","http://10.29.61.159:5050/images/2024-11-27/2.png","我是yy",648943));
+//        list.add(new SessionListItem("tj","","我是tj",3156));
+//
+//        SessionListItem.sortByLastReceiveTime(list);
+//        return list;
+//    }
 
-        SessionListItem.sortByLastReceiveTime(list);
-        return list;
+    private void loadChatSession(){
+        List<Map<String, Object>> selectSessionList=chatSessionModel.selectUserSessionList();
+        sessionList.clear();
+        for (Map<String, Object> selectSessionItem:selectSessionList){
+            sessionList.add(new SessionListItem(selectSessionItem));
+        }
+        SessionListItem.sortByLastReceiveTime(sessionList);
     }
 }
 
