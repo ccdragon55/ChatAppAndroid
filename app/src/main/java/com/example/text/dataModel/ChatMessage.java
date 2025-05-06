@@ -61,7 +61,7 @@ public class ChatMessage {
         if (messageIdValue instanceof Long) {
             this.messageId = (long) messageIdValue;
         } else if (messageIdValue instanceof Integer) {
-            this.messageId = (Long) messageIdValue; // 需要强转
+            this.messageId = (int) messageIdValue; // 需要强转
         } else {
             this.messageId = 0;
         }
