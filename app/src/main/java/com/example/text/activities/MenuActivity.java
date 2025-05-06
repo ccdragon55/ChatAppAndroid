@@ -15,6 +15,7 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.text.activities.friendActivities.FriendsFragment;
+import com.example.text.activities.notificationsActivity.NotificationsFragment;
 import com.example.text.activities.profileActivities.ProfileActivity;
 import com.example.text.R;
 import com.example.text.activities.chatActivities.ChatListFragment;

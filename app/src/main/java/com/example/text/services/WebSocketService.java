@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -67,22 +68,41 @@ public class WebSocketService extends Service {
         // 必须立即创建通知并调用 startForeground()
         createNotificationChannel();
         Notification notification = buildNotification();
-        startForeground(NOTIFICATION_ID, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+        } else {
+            startForeground(NOTIFICATION_ID, notification);
+        }
+//        startForeground(NOTIFICATION_ID, notification);
 
         return START_STICKY; // 根据需求选择合适的返回值
     }
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "WebSocket Service",
-                    NotificationManager.IMPORTANCE_LOW
-            );
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+            if (manager != null) { // 🔥 避免 manager 为空导致崩溃
+                NotificationChannel channel = new NotificationChannel(
+                        CHANNEL_ID,
+                        "WebSocket Service",
+                        NotificationManager.IMPORTANCE_LOW
+                );
+                manager.createNotificationChannel(channel);
+            }
         }
     }
+
+//    private void createNotificationChannel() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(
+//                    CHANNEL_ID,
+//                    "WebSocket Service",
+//                    NotificationManager.IMPORTANCE_LOW
+//            );
+//            NotificationManager manager = getSystemService(NotificationManager.class);
+//            manager.createNotificationChannel(channel);
+//        }
+//    }
 
     private Notification buildNotification() {
         return new NotificationCompat.Builder(this, CHANNEL_ID)

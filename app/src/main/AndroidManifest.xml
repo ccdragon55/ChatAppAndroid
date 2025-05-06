@@ -5,6 +5,7 @@
 
     <!-- 前台服务权限 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!--文件读取权限-->
@@ -27,7 +28,10 @@
         <service
             android:name=".services.WebSocketService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:foregroundServiceType="dataSync"
+            tools:ignore="ForegroundServicePermission" />
 
         <activity
             android:name=".activities.MainActivity"
@@ -112,7 +116,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.NotificationsFragment"
+            android:name=".activities.notificationsActivity.NotificationsFragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

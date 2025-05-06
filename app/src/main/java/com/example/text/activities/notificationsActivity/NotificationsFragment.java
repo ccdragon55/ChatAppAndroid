@@ -1,4 +1,4 @@
-package com.example.text.activities;
+package com.example.text.activities.notificationsActivity;
 
 // HomeFragment.java
 
