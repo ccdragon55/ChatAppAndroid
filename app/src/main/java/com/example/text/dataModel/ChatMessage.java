@@ -4,13 +4,15 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ChatMessage {
-    public static final int TYPE_RECEIVED = -1; // 接收的消息（左边）
+    public static final int TYPE_RECEIVED_AUDIO = -2; // 接收的消息（左边）
+    public static final int TYPE_RECEIVED_TEXT = -1; // 接收的消息（左边）
     public static final int TYPE_SYSTEM = 0; // 系统发送的消息（中间）
-    public static final int TYPE_SENT = 1;     // 发送的消息（右边）
+    public static final int TYPE_SENT_TEXT = 1;     // 发送的消息（右边）
+    public static final int TYPE_SENT_AUDIO = 2;     // 发送的消息（右边）
     private int type;
 
     private String userId;
-    private String messageId;
+    private long messageId;
     private String sessionId;
     private int messageType;
     private String messageContent;
@@ -18,6 +20,7 @@ public class ChatMessage {
     private String sendUserId;
     private String sendUserNickName;
     private long sendTime;
+    private boolean showDate;
     private String date;//时间戳sendTime经过处理后，显示的标准化时间
     private int status;
     private long fileSize;
@@ -26,7 +29,7 @@ public class ChatMessage {
     private int fileType;
     private String url;
 
-    public ChatMessage(String userId, String messageId, String sessionId, int messageType, String messageContent, int contactType, String sendUserId, String sendUserNickName, long sendTime, int status, long fileSize, String fileName, String filePath, int fileType, String url) {
+    public ChatMessage(String userId, long messageId, String sessionId, int messageType, String messageContent, int contactType, String sendUserId, String sendUserNickName, long sendTime, int status, long fileSize, String fileName, String filePath, int fileType, String url) {
         this.userId = userId;
         this.messageId = messageId;
         this.sessionId = sessionId;
@@ -45,15 +48,16 @@ public class ChatMessage {
         if(sendUserId==null){
             type=TYPE_SYSTEM;
         }else if(sendUserId.equals(userId)){
-            type=TYPE_SENT;
+            type=TYPE_SENT_TEXT;
         }else{
-            type=TYPE_RECEIVED;
+            type=TYPE_RECEIVED_TEXT;
         }
     }
 
     public ChatMessage(Map<String, Object> map) {
         this.userId = (String) map.getOrDefault("userId", "");
-        this.messageId = (String) map.getOrDefault("messageId", "");
+        Object messageIdValue = map.getOrDefault("messageId", 0);
+        this.messageId = (messageIdValue instanceof Long) ? (long) messageIdValue : 0;
         this.sessionId = (String) map.getOrDefault("sessionId", "");
         Object messageTypeValue = map.getOrDefault("contactType", 0);
         this.messageType = (messageTypeValue instanceof Integer) ? (int) messageTypeValue : 0;
@@ -73,12 +77,12 @@ public class ChatMessage {
         Object fileTypeValue = map.getOrDefault("contactType", 0);
         this.fileType = (fileTypeValue instanceof Integer) ? (int) fileTypeValue : 0;
         this.url = (String) map.getOrDefault("url", "");
-        if(Objects.equals(sendUserId, "")){
+        if(sendUserId==null){
             type=TYPE_SYSTEM;
         }else if(sendUserId.equals(userId)){
-            type=TYPE_SENT;
+            type=TYPE_SENT_TEXT;
         }else{
-            type=TYPE_RECEIVED;
+            type=TYPE_RECEIVED_TEXT;
         }
     }
 
@@ -98,11 +102,11 @@ public class ChatMessage {
         this.userId = userId;
     }
 
-    public String getMessageId() {
+    public long getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    public void setMessageId(long messageId) {
         this.messageId = messageId;
     }
 
@@ -160,6 +164,14 @@ public class ChatMessage {
 
     public void setSendTime(long sendTime) {
         this.sendTime = sendTime;
+    }
+
+    public boolean isShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(boolean showDate) {
+        this.showDate = showDate;
     }
 
     public String getDate() {

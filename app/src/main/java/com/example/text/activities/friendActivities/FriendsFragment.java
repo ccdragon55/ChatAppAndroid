@@ -65,7 +65,6 @@ public class FriendsFragment extends Fragment {
         rvFriends.setLayoutManager(mLayoutManager);
 
         friendList=new ArrayList<>();
-        fetchContacts();
 
 //        mAdapter = new FriendListAdapter(generateData());
         mAdapter = new FriendListAdapter(friendList);
@@ -74,7 +73,7 @@ public class FriendsFragment extends Fragment {
             // 根据 position 获取数据
             FriendListItem friendListItem= mAdapter.getFriendListItem(position);
             Intent intent = new Intent(getActivity(), FriendProfileActivity.class);
-            intent.putExtra("friendName", friendListItem.getContactName());
+            intent.putExtra("friendId", friendListItem.getContactId());
             startActivity(intent);
         });
         rvFriends.setAdapter(mAdapter);
@@ -102,6 +101,8 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+        fetchContacts();
+
         btnCreateGroup.setOnClickListener(v->showCreateGroupDialog());
         btnAddFriend.setOnClickListener(v->showAddContactDialog());
 
@@ -114,11 +115,19 @@ public class FriendsFragment extends Fragment {
         Call<FetchContactsResponse> call = apiService.getContact(Store.getInstance(requireActivity().getApplicationContext()).getData("token"));
 
         call.enqueue(new Callback<FetchContactsResponse>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<FetchContactsResponse> call, @NonNull Response<FetchContactsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    friendList = response.body().getData();
+                    friendList.clear();
+                    friendList.addAll(response.body().getData());
+                    for(FriendListItem item:friendList){
+                        item.generateFirstLetter();
+                    }
                     FriendListItem.sortByFiestLetter(friendList);
+                    mAdapter.processData(friendList);
+                    mAdapter.notifyDataSetChanged();
+                    Log.e("fk","friendList:"+friendList.toString());
                 } else {
                     Toast.makeText(requireActivity(), "网络错误: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

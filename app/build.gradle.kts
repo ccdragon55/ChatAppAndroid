@@ -64,7 +64,9 @@ dependencies {
 
     // 使用TinyPinyin库处理中文转拼音
     implementation("com.github.promeg:tinypinyin:2.0.3")
-//    implementation 'com.github.promeg:tinypinyin:2.0.3'
+
+    //红点组件
+    implementation ("com.nex3z:notification-badge:1.0.4")
 
     implementation("com.github.bumptech.glide:glide:4.16.0") // 使用最新版本
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0") // 如果需要注解处理

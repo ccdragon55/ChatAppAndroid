@@ -9,6 +9,7 @@ public class ChatSession {
     private String contactName;
     private String lastMessage;
     private long lastReceiveTime;
+    private String date;//时间戳lastReceiveTime经过处理后，显示的标准化时间
     private int noReadCount;
     private int memberCount;
     private int topType;
@@ -89,6 +90,14 @@ public class ChatSession {
 
     public void setLastReceiveTime(long lastReceiveTime) {
         this.lastReceiveTime = lastReceiveTime;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getNoReadCount() {

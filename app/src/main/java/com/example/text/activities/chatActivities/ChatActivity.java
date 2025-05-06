@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -206,8 +208,6 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        loadChatMessageData();
-
         // 添加测试数据
 //        messageList.add(new ChatMessage(friendName,"你好！", ChatMessage.TYPE_RECEIVED, "10:00"));
 //        messageList.add(new ChatMessage("self","你好呀~", ChatMessage.TYPE_SENT, "10:01"));
@@ -243,6 +243,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        loadChatMessageData();
+
 //        buttonBack=findViewById(R.id.button_back);
 //        buttonBack.setOnClickListener(v -> finish());
         buttonBack = findViewById(R.id.button_back); // 使用新ID
@@ -256,6 +258,9 @@ public class ChatActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void loadChatMessageData() {
         List<Map<String,Object>> data = chatMessageModel.selectChatMessageByPage(sessionId,currentPage,pageSize,startTime);
+
+        Log.e("fk","data:"+data.toString());
+
         if(data==null){
             return;
         }
@@ -271,9 +276,12 @@ public class ChatActivity extends AppCompatActivity {
         messageList.addAll(0, messageData);
 
         // 格式化日期字段
-        for (ChatMessage msg : messageList) {
-            msg.setDate(DateUtils.formatDate(msg.getSendTime()));
+        for (int i=0;i<messageList.size();++i) {
+            messageData.get(i).setDate(DateUtils.formatDate(messageData.get(i).getSendTime()));
+            messageData.get(i).setShowDate(notSameDate(i));
         }
+
+        Log.e("fk","messageList:"+messageList.toString());
 
         adapter.notifyDataSetChanged();
 
@@ -298,13 +306,13 @@ public class ChatActivity extends AppCompatActivity {
 
         // 构造本地消息对象
         Map<String, Object> data = new HashMap<>();
-        data.put("userId", userId);
+        data.put("userId", sharedPreferences.getString("userId",""));
         data.put("sessionId", sessionId);
         data.put("messageType", 2);
         data.put("messageContent", content);
         data.put("contactType", contactType);
-        data.put("sendUserId", userId);
-        data.put("sendUserNickName", sendUserNickName);
+        data.put("sendUserId", sharedPreferences.getString("userId",""));
+        data.put("sendUserNickName", sharedPreferences.getString("nickName",""));
         data.put("sendTime", System.currentTimeMillis());
         data.put("status", 1);
 
@@ -350,5 +358,9 @@ public class ChatActivity extends AppCompatActivity {
             ChatInputUtils.messageInput.put(sessionId,input);
         }
         finish();
+    }
+
+    private boolean notSameDate(int index) {
+        return index == 0 || !Objects.equals(messageList.get(index).getDate(), messageList.get(index).getDate());
     }
 }

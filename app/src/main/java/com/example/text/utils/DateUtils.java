@@ -19,13 +19,23 @@ public class DateUtils {
     private static DateTimeFormatter WEEKDAY_FORMAT;
     private static DateTimeFormatter DATE_FORMAT;
 
+    static {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            ZONE = ZoneId.of("Asia/Shanghai");
+            LOCALE = Locale.CHINA;
+            TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm", LOCALE);
+            WEEKDAY_FORMAT = DateTimeFormatter.ofPattern("EEEE", LOCALE);
+            DATE_FORMAT = DateTimeFormatter.ofPattern("yy/MM/dd", LOCALE);
+        }
+    }
+
     public DateUtils(){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             ZONE = ZoneId.systemDefault();
             LOCALE = Locale.CHINA;
             TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm", LOCALE);
             WEEKDAY_FORMAT = DateTimeFormatter.ofPattern("EEEE", LOCALE);
-            DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy/MM/dd", LOCALE);
+            DATE_FORMAT = DateTimeFormatter.ofPattern("yy/MM/dd", LOCALE);
         }
     }
 

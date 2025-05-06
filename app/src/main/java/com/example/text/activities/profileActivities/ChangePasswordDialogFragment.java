@@ -75,19 +75,19 @@ public class ChangePasswordDialogFragment extends DialogFragment {
         return true;
     }
 
-    // 调整对话框宽度（50% 屏幕宽度）
-    @Override
-    public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            Window window = dialog.getWindow();
-            if (window != null) {
-                DisplayMetrics metrics = new DisplayMetrics();
-                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                int width = (int) (metrics.widthPixels * 0.5);
-                window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
-            }
-        }
-    }
+//    // 调整对话框宽度（50% 屏幕宽度）
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Dialog dialog = getDialog();
+//        if (dialog != null) {
+//            Window window = dialog.getWindow();
+//            if (window != null) {
+//                DisplayMetrics metrics = new DisplayMetrics();
+//                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//                int width = (int) (metrics.widthPixels * 0.5);
+//                window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+//            }
+//        }
+//    }
 }

@@ -48,7 +48,8 @@ public class MenuActivity extends AppCompatActivity {
 
         avatar=findViewById(R.id.iv_avatar);
         tvUserName=findViewById(R.id.tv_username);
-        tvUserName.setText("user");
+        SharedPreferences sharedPreferences=getSharedPreferences("userPrefs", MODE_PRIVATE);
+        tvUserName.setText(sharedPreferences.getString("nickName",""));
 
         loadUserAvatar();
 //        Log.e("abc", "onCreate: "+ avatar);

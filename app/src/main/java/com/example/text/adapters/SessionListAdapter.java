@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.text.listeners.OnItemClickListener;
 import com.example.text.R;
 import com.example.text.dataModel.SessionListItem;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.List;
 
@@ -61,22 +62,29 @@ public class SessionListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // 左侧消息 ViewHolder
     static class SessionViewHolder extends RecyclerView.ViewHolder {
         ImageView ivAvatar;
+        NotificationBadge badge;
         TextView tvName;
+        TextView tvDate;
         TextView tvLastMessage;
+
 
         SessionViewHolder(View itemView) {
             super(itemView);
             ivAvatar = itemView.findViewById(R.id.iv_sessionList_avatar);
+            badge = itemView.findViewById(R.id.badge);
             tvName = itemView.findViewById(R.id.tv_sessionList_name);
+            tvDate = itemView.findViewById(R.id.tv_sessionList_date);
             tvLastMessage = itemView.findViewById(R.id.tv_sessionList_lastMessage);
         }
 
         void bind(SessionListItem session) {
             Glide.with(ivAvatar.getContext())
-                    .load(session.getUrl())
+                    .load(session.getAvatarUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(ivAvatar);
+            badge.setNumber(session.getNoReadCount());
             tvName.setText(session.getContactName());
+            tvDate.setText(session.getDate());
             tvLastMessage.setText(session.getLastMessage());
         }
     }

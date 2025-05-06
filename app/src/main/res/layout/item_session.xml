@@ -1,40 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chatList_test"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <!--显示头像-->
-    <ImageView
-        android:id="@+id/iv_sessionList_avatar"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:baselineAlignBottom="true"
-        android:paddingLeft="8dp" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- 聊天项主内容 -->
+        <ImageView
+            android:id="@+id/iv_sessionList_avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:baselineAlignBottom="true"
+            android:paddingStart="8dp" />
+
+        <!-- 角标 -->
+        <com.nex3z.notificationbadge.NotificationBadge
+            android:id="@+id/badge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top|end"
+            app:nbMaxTextLength="2"
+            app:nbEllipsizeText="…"
+            app:nbAnimationEnabled="true"/>
+    </FrameLayout>
+
+<!--    &lt;!&ndash;显示头像&ndash;&gt;-->
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_sessionList_avatar"-->
+<!--        android:layout_width="64dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:baselineAlignBottom="true"-->
+<!--        android:paddingLeft="8dp" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_sessionList_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:textColor="#1D1D1C"
-            android:textSize="20sp" />
+            android:orientation="horizontal">
+<!--            <TextView-->
+<!--                android:id="@+id/tv_sessionList_name"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="38dp"-->
+<!--                android:paddingLeft="8dp"-->
+<!--                android:textColor="#1D1D1C"-->
+<!--                android:textSize="20sp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_sessionList_date"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="38dp"-->
+<!--                android:paddingRight="8px"-->
+<!--                android:textColor="#B4B4B9"-->
+<!--                android:textSize="14sp" />-->
+            <TextView
+                android:id="@+id/tv_sessionList_name"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="7"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="#1D1D1C"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tv_sessionList_date"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="3"
+                android:gravity="end"
+                android:paddingRight="10dp"
+                android:textColor="#B4B4B9"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_sessionList_lastMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="8px"
-            android:paddingTop="20px"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
             android:textColor="#B4B4B9"
             android:textSize="14sp" />
     </LinearLayout>
-
-
 </LinearLayout>

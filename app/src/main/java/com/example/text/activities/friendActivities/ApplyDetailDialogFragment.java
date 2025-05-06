@@ -97,28 +97,28 @@ public class ApplyDetailDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // 设置对话框尺寸
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            Window window = dialog.getWindow();
-            if (window != null) {
-                DisplayMetrics metrics = new DisplayMetrics();
-                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-                // 设置宽度为屏幕宽度的50%
-                int width = (int) (metrics.widthPixels * 0.5);
-
-                // 设置最大高度为屏幕高度的70%
-                int maxHeight = (int) (metrics.heightPixels * 0.7);
-
-                window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
-                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            }
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // 设置对话框尺寸
+//        Dialog dialog = getDialog();
+//        if (dialog != null) {
+//            Window window = dialog.getWindow();
+//            if (window != null) {
+//                DisplayMetrics metrics = new DisplayMetrics();
+//                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//
+//                // 设置宽度为屏幕宽度的50%
+//                int width = (int) (metrics.widthPixels * 0.8);
+//
+//                // 设置最大高度为屏幕高度的70%
+//                int maxHeight = (int) (metrics.heightPixels * 0.7);
+//
+//                window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+//                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//            }
+//        }
+//    }
 
     public void setOnActionClickListener(OnActionClickListener listener) {
         this.listener = listener;

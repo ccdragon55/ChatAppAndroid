@@ -103,18 +103,18 @@ public class AddContactDialogFragment extends DialogFragment {
     }
 
     // 设置对话框宽度为 50%
-    @Override
-    public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            Window window = dialog.getWindow();
-            if (window != null) {
-                DisplayMetrics metrics = new DisplayMetrics();
-                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                int width = (int) (metrics.widthPixels * 0.5);
-                window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
-            }
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Dialog dialog = getDialog();
+//        if (dialog != null) {
+//            Window window = dialog.getWindow();
+//            if (window != null) {
+//                DisplayMetrics metrics = new DisplayMetrics();
+//                requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//                int width = (int) (metrics.widthPixels * 0.8);
+//                window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+//            }
+//        }
+//    }
 }

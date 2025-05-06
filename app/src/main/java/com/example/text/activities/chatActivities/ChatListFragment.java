@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.example.text.R;
 import com.example.text.dataModel.ChatSession;
 import com.example.text.dataModel.SessionListItem;
 import com.example.text.database.ChatSessionModel;
+import com.example.text.utils.DateUtils;
 import com.example.text.utils.JsonUtils;
 
 import org.json.JSONException;
@@ -32,8 +34,8 @@ import java.util.Objects;
 public class ChatListFragment extends Fragment {
     private RecyclerView recyclerView;
     private SessionListAdapter adapter;
-    private List<SessionListItem> sessionList = new ArrayList<>();
-    private final ChatSessionModel chatSessionModel=new ChatSessionModel(requireActivity().getApplicationContext());
+    private List<SessionListItem> sessionList;
+    private ChatSessionModel chatSessionModel;
 
     private BroadcastReceiver wsReceiver = new BroadcastReceiver() {
         @Override
@@ -114,7 +116,6 @@ public class ChatListFragment extends Fragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction("ACTION_WS_receiveMessage");
         filter.addAction("ACTION_WS_receiveSingleMessageUpdateChatSession");
-        filter.addAction("ACTION_WS_MESSAGE_RECEIVED");
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(wsReceiver, filter);
     }
 
@@ -129,7 +130,10 @@ public class ChatListFragment extends Fragment {
         // 1. 加载 Fragment 的布局
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        sessionList = new ArrayList<>();
+        chatSessionModel=new ChatSessionModel(requireActivity().getApplicationContext());
 
+        loadChatSession();
 
         // 初始化 RecyclerView
         recyclerView = rootView.findViewById(R.id.rv_sessionList);
@@ -146,7 +150,7 @@ public class ChatListFragment extends Fragment {
 //            intent.putExtra("friendName", sessionListItem.getContactName());
             intent.putExtra("userId", sessionListItem.getUserId());
             intent.putExtra("sessionId", sessionListItem.getSessionId());
-            intent.putExtra("contactId", sessionListItem.getContactID());
+            intent.putExtra("contactId", sessionListItem.getContactId());
             intent.putExtra("sendUserNickName", sessionListItem.getContactName());
             intent.putExtra("contactType", sessionListItem.getContactType());
             startActivity(intent);
@@ -183,11 +187,16 @@ public class ChatListFragment extends Fragment {
 
     private void loadChatSession(){
         List<Map<String, Object>> selectSessionList=chatSessionModel.selectUserSessionList();
+        Log.e("fk","session data:"+selectSessionList.toString());
         sessionList.clear();
         for (Map<String, Object> selectSessionItem:selectSessionList){
             sessionList.add(new SessionListItem(selectSessionItem));
         }
         SessionListItem.sortByLastReceiveTime(sessionList);
+        for(SessionListItem session:sessionList){
+            session.setDate(DateUtils.formatDate(session.getLastReceiveTime()));
+        }
+        Log.e("fk","sessionList:"+sessionList.toString());
     }
 }
 

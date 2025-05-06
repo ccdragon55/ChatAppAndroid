@@ -1,26 +1,26 @@
 package com.example.text.dataModel;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class SessionListItem {
     private String userId;
-    private String contactID;
+    private String contactId;
     private int contactType;
     private String sessionId;
     private int status;
     private String contactName;
     private String lastMessage;
     private long lastReceiveTime;
+    private String date;//时间戳lastReceiveTime经过处理后，显示的标准化时间
     private int noReadCount;
     private int memberCount;
     private int topType;
-    private String url; // 头像
+    private String avatarUrl; // 头像
 
-    public SessionListItem(String userId, String contactID, int contactType, String sessionId, int status, String contactName, String lastMessage, long lastReceiveTime, int noReadCount, int memberCount, int topType) {
+    public SessionListItem(String userId, String contactId, int contactType, String sessionId, int status, String contactName, String lastMessage, long lastReceiveTime, int noReadCount, int memberCount, int topType) {
         this.userId = userId;
-        this.contactID = contactID;
+        this.contactId = contactId;
         this.contactType = contactType;
         this.sessionId = sessionId;
         this.status = status;
@@ -34,7 +34,7 @@ public class SessionListItem {
 
     public SessionListItem(Map<String, Object> map) {
         this.userId = (String) map.getOrDefault("userId", "");
-        this.contactID = (String) map.getOrDefault("contactID", "");
+        this.contactId = (String) map.getOrDefault("contactId", "");
         Object contactTypeValue = map.getOrDefault("contactType", 0);
         this.contactType = (contactTypeValue instanceof Integer) ? (int) contactTypeValue : 0;
         this.sessionId = (String) map.getOrDefault("sessionId", "");
@@ -50,7 +50,7 @@ public class SessionListItem {
         this.memberCount = (memberCountValue instanceof Integer) ? (int) memberCountValue : 1;
         Object topTypeValue = map.getOrDefault("topType", 0);
         this.topType = (topTypeValue instanceof Integer) ? (int) topTypeValue : 0;
-        this.url=(String) map.getOrDefault("url", "");
+        this.avatarUrl =(String) map.getOrDefault("avatarUrl", "");
     }
 
     public String getUserId() {
@@ -61,12 +61,12 @@ public class SessionListItem {
         this.userId = userId;
     }
 
-    public String getContactID() {
-        return contactID;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setContactID(String contactID) {
-        this.contactID = contactID;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public int getContactType() {
@@ -117,6 +117,14 @@ public class SessionListItem {
         this.lastReceiveTime = lastReceiveTime;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public int getNoReadCount() {
         return noReadCount;
     }
@@ -141,19 +149,19 @@ public class SessionListItem {
         this.topType = topType;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     @Override
     public String toString() {
         return "SessionListItem{" +
                 "userId='" + userId + '\'' +
-                ", contactID='" + contactID + '\'' +
+                ", contactID='" + contactId + '\'' +
                 ", contactType=" + contactType +
                 ", sessionId='" + sessionId + '\'' +
                 ", status=" + status +
@@ -163,7 +171,7 @@ public class SessionListItem {
                 ", noReadCount=" + noReadCount +
                 ", memberCount=" + memberCount +
                 ", topType=" + topType +
-                ", url='" + url + '\'' +
+                ", url='" + avatarUrl + '\'' +
                 '}';
     }
 

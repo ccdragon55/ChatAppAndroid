@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!-- 日期标签，默认隐藏 -->
+    <TextView
+        android:id="@+id/tv_DateHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:gravity="center"
+        android:textColor="#888"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <!-- 发送方消息（右侧） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="end">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+            <TextView
+                android:id="@+id/tv_nickName_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="280dp"
+                android:layout_marginEnd="8dp"
+                android:padding="4dp"
+                android:textColor="@android:color/black"
+                android:textSize="11sp" />
+
+            <!-- 消息气泡 -->
+            <TextView
+                android:id="@+id/tv_content_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="280dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_message_self"
+                android:padding="12dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- 头像 -->
+        <ImageView
+            android:id="@+id/iv_avatar_right"
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
+<!--            android:src="@drawable/ic_avatar_me" -->
+
+
+    </LinearLayout>
+</LinearLayout>
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

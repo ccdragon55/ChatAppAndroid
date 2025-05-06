@@ -53,7 +53,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     //=============================================//
 
     // 数据预处理方法（核心逻辑）
-    private void processData(List<FriendListItem> originalList) {
+    public void processData(List<FriendListItem> originalList) {
         mData.clear();
         String currentLetter = "";
 

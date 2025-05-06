@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.text.R;
 import com.example.text.dataModel.ChatMessage;
-import com.example.text.utils.Store;
 
 import java.util.List;
 
@@ -32,14 +31,18 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == ChatMessage.TYPE_RECEIVED) {
+        if (viewType == ChatMessage.TYPE_RECEIVED_TEXT) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_message_others, parent, false);
+                    .inflate(R.layout.item_message_others_text, parent, false);
             return new LeftViewHolder(view);
-        } else {
+        } else if (viewType == ChatMessage.TYPE_SENT_TEXT) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_message_self, parent, false);
+                    .inflate(R.layout.item_message_self_text, parent, false);
             return new RightViewHolder(view);
+        }else{
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_message_system, parent, false);
+            return new SystemViewHolder(view);
         }
     }
 
@@ -47,10 +50,15 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ChatMessage message = messageList.get(position);
-        if (holder instanceof LeftViewHolder) {
+        if (holder instanceof SystemViewHolder){
+            ((SystemViewHolder) holder).tvDateHeader.setVisibility(message.isShowDate()?View.VISIBLE:View.GONE);
+            ((SystemViewHolder) holder).tvContent.setText(message.getMessageContent());
+        }else if (holder instanceof LeftViewHolder) {
+            ((LeftViewHolder) holder).tvDateHeader.setVisibility(message.isShowDate()?View.VISIBLE:View.GONE);
             ((LeftViewHolder) holder).tvContent.setText(message.getMessageContent());
             ((LeftViewHolder) holder).tvNickName.setText(message.getSendUserNickName());
         } else if (holder instanceof RightViewHolder) {
+            ((RightViewHolder) holder).tvDateHeader.setVisibility(message.isShowDate()?View.VISIBLE:View.GONE);
             ((RightViewHolder) holder).tvContent.setText(message.getMessageContent());
             ((RightViewHolder) holder).tvNickName.setText(message.getSendUserNickName());
         }
@@ -61,13 +69,27 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return messageList.size();
     }
 
+    //系统消息 ViewHolder
+    static class SystemViewHolder extends RecyclerView.ViewHolder {
+        TextView tvDateHeader;
+        TextView tvContent;
+
+        SystemViewHolder(View itemView) {
+            super(itemView);
+            tvDateHeader = itemView.findViewById(R.id.tv_DateHeader);
+            tvContent = itemView.findViewById(R.id.tv_content_system);
+        }
+    }
+
     // 左侧消息 ViewHolder
     static class LeftViewHolder extends RecyclerView.ViewHolder {
+        TextView tvDateHeader;
         TextView tvNickName;
         TextView tvContent;
 
         LeftViewHolder(View itemView) {
             super(itemView);
+            tvDateHeader = itemView.findViewById(R.id.tv_DateHeader);
             tvNickName = itemView.findViewById(R.id.tv_nickName_left);
             tvContent = itemView.findViewById(R.id.tv_content_left);
         }
@@ -75,11 +97,13 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // 右侧消息 ViewHolder
     static class RightViewHolder extends RecyclerView.ViewHolder {
+        TextView tvDateHeader;
         TextView tvNickName;
         TextView tvContent;
 
         RightViewHolder(View itemView) {
             super(itemView);
+            tvDateHeader = itemView.findViewById(R.id.tv_DateHeader);
             tvNickName = itemView.findViewById(R.id.tv_nickName_right);
             tvContent = itemView.findViewById(R.id.tv_content_right);
         }

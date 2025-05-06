@@ -5,6 +5,8 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.github.promeg.pinyinhelper.Pinyin;
 
 import java.util.ArrayList;
@@ -108,6 +110,20 @@ public class FriendListItem {
         this.firstLetter = firstLetter;
     }
 
+    public void generateFirstLetter(){
+        if (TextUtils.isEmpty(contactName)) {
+            firstLetter="#";
+            return;
+        }
+        char firstChar = contactName.charAt(0);
+        if (('A'<=firstChar&&firstChar<='Z')||('a'<=firstChar&&firstChar<='z')) {
+            firstLetter=String.valueOf(Character.toUpperCase(firstChar));
+        } else {
+            String pinyin = Pinyin.toPinyin(firstChar);
+            firstLetter=pinyin.isEmpty()||pinyin.charAt(0)<'A'||'Z'<pinyin.charAt(0) ? "#" : pinyin.substring(0, 1);
+        }
+    }
+
     public static void sortByFiestLetter(List<FriendListItem> list){
         Collections.sort(list, (f1, f2) ->{
             if(Objects.equals(f1.getFirstLetter(), "#") && Objects.equals(f2.getFirstLetter(), "#")){
@@ -158,6 +174,17 @@ public class FriendListItem {
 //                f1.getFirstLetter().compareTo(f2.getFirstLetter()));
         sortByFiestLetter(list);
         return list;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "FriendListItem{" +
+                "contactId='" + contactId + '\'' +
+                ", contactName='" + contactName + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", firstLetter='" + firstLetter + '\'' +
+                '}';
     }
 }
 
