@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     saveAvatarLocally(userId, avatarUrl);
 
                     AvatarModel avatarModel=new AvatarModel(getApplicationContext());
-                    avatarModel.saveAvatar(Store.getInstance(getApplicationContext()).getUserId(),Store.getInstance(getApplicationContext()).getData("token"));
+                    avatarModel.saveAvatar(Store.getInstance(getApplicationContext()).getUserId(),avatarUrl);
                 }
             }
 

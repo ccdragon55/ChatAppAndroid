@@ -67,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnChangeProfile=findViewById(R.id.btn_changeProfile);
         btnChangePassword=findViewById(R.id.btn_changePassword);
 
+        userId=Store.getInstance(getApplicationContext()).getUserId();
         showInfo(userId);
 
 //        tvUserName.setText("昵称:"+"wjc");

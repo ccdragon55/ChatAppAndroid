@@ -51,7 +51,7 @@ public class ApplyInfoAdapter extends RecyclerView.Adapter<ApplyInfoAdapter.View
     // 更新指定项的状态
     public void updateRequestStatus(int position, int status) {
         if (position >= 0 && position < requests.size()) {
-            requests.get(position).setStatus(status);
+            requests.get(position).setStatu(status);
             notifyItemChanged(position);
         }
     }
@@ -69,7 +69,7 @@ public class ApplyInfoAdapter extends RecyclerView.Adapter<ApplyInfoAdapter.View
         ApplyInfoItem request = requests.get(position);
 
         // 加载头像
-        Glide.with(holder.itemView)
+        Glide.with(holder.ivAvatar)
                 .load(request.getAvatarUrl())
                 .circleCrop()
                 .into(holder.ivAvatar);
@@ -79,7 +79,7 @@ public class ApplyInfoAdapter extends RecyclerView.Adapter<ApplyInfoAdapter.View
         holder.tvMessage.setMaxLines(request.isExpanded() ? Integer.MAX_VALUE : 1);
 
         // 根据状态显示操作按钮或文本
-        if (request.getStatus() == 0) {
+        if (request.getStatu() == 0) {
             holder.btnAccept.setVisibility(View.VISIBLE);
             holder.btnReject.setVisibility(View.VISIBLE);
             holder.tvStatus.setVisibility(View.GONE);
@@ -87,7 +87,7 @@ public class ApplyInfoAdapter extends RecyclerView.Adapter<ApplyInfoAdapter.View
             holder.btnAccept.setVisibility(View.GONE);
             holder.btnReject.setVisibility(View.GONE);
             holder.tvStatus.setVisibility(View.VISIBLE);
-            holder.tvStatus.setText(request.getStatus() == 1 ? "已添加" : "已拒绝");
+            holder.tvStatus.setText(request.getStatu() == 1 ? "已添加" : "已拒绝");
         }
 
         // 点击展开/折叠消息

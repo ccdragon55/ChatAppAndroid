@@ -50,8 +50,8 @@
         <!-- 同意/拒绝按钮（默认隐藏） -->
         <Button
             android:id="@+id/btn_accept"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="65dp"
+            android:layout_height="48dp"
             android:text="同意"
             android:backgroundTint="#07C160"
             android:textColor="@color/white"
@@ -60,8 +60,8 @@
 
         <Button
             android:id="@+id/btn_reject"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_width="65dp"
+            android:layout_height="48dp"
             android:text="拒绝"
             android:layout_marginStart="8dp"
             android:backgroundTint="#FF3B30"

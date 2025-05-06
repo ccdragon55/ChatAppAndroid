@@ -2,6 +2,7 @@ package com.example.text.activities.friendActivities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApplyInfoActivity extends AppCompatActivity implements ApplyInfoAdapter.OnActionClickListener {
-
+    private ImageButton btnBack;
     private RecyclerView recyclerView;
     private ApplyInfoAdapter adapter;
     private List<ApplyInfoItem> requests;
@@ -47,7 +48,9 @@ public class ApplyInfoActivity extends AppCompatActivity implements ApplyInfoAda
 
         // 初始化数据（模拟数据）
         requests = new ArrayList<>();
-        fetchApplyInfo();
+//        requests.add(new ApplyInfoItem("123","","m","fuck",0));
+
+        btnBack=findViewById(R.id.btn_back);
 
         // 配置 RecyclerView
         recyclerView = findViewById(R.id.apply_recyclerView);
@@ -63,6 +66,10 @@ public class ApplyInfoActivity extends AppCompatActivity implements ApplyInfoAda
         recyclerView.addItemDecoration(new DividerItemDecoration(
                 this, DividerItemDecoration.VERTICAL
         ));
+
+        fetchApplyInfo();
+
+        btnBack.setOnClickListener(v->finish());
     }
 
     private void fetchApplyInfo(){
@@ -70,10 +77,13 @@ public class ApplyInfoActivity extends AppCompatActivity implements ApplyInfoAda
         Call<FetchApplyInfoResponse> call = apiService.searchApply(new UserIdRequest(Store.getInstance(getApplicationContext()).getUserId()),Store.getInstance(getApplicationContext()).getData("token"));
 
         call.enqueue(new Callback<FetchApplyInfoResponse>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<FetchApplyInfoResponse> call, @NonNull Response<FetchApplyInfoResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    requests = response.body().getData();
+                    requests.clear();
+                    requests.addAll(response.body().getData());
+                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(ApplyInfoActivity.this, "上传失败: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

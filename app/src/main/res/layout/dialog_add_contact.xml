@@ -105,7 +105,7 @@
             android:id="@+id/btn_send"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="更改"/>
+            android:text="发送"/>
 
         <Button
             android:id="@+id/btn_cancel"

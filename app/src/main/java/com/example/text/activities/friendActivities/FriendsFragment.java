@@ -43,7 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FriendsFragment extends Fragment {
-    private Button btnCreateGroup,btnAddFriend,btnGroupList;
+    private Button btnCreateGroup,btnAddFriend,btnGroupList,btnApplyList;
 
     private FriendListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -58,6 +58,7 @@ public class FriendsFragment extends Fragment {
         btnCreateGroup=rootView.findViewById(R.id.btn_createGroup);
         btnAddFriend=rootView.findViewById(R.id.btn_addFriend);
         btnGroupList=rootView.findViewById(R.id.btn_groupList);
+        btnApplyList=rootView.findViewById(R.id.btn_applyList);
 
         // 初始化RecyclerView
         RecyclerView rvFriends = rootView.findViewById(R.id.rv_friends);
@@ -105,14 +106,15 @@ public class FriendsFragment extends Fragment {
 
         btnCreateGroup.setOnClickListener(v->showCreateGroupDialog());
         btnAddFriend.setOnClickListener(v->showAddContactDialog());
+        btnGroupList.setOnClickListener(v->showGroupList());
+        btnApplyList.setOnClickListener(v->showInforms());
 
         return rootView;
     }
 
     private void fetchContacts(){
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        //TODO
-        Call<FetchContactsResponse> call = apiService.getContact(Store.getInstance(requireActivity().getApplicationContext()).getData("token"));
+        Call<FetchContactsResponse> call = apiService.getUserContact(Store.getInstance(requireActivity().getApplicationContext()).getData("token"));
 
         call.enqueue(new Callback<FetchContactsResponse>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -231,6 +233,16 @@ public class FriendsFragment extends Fragment {
             });
         });
         dialog.show(getParentFragmentManager(), "加好友/群");
+    }
+
+    private void showGroupList(){
+        Intent intent=new Intent(getActivity(), GroupListActivity.class);
+        startActivity(intent);
+    }
+
+    private void showInforms(){
+        Intent intent=new Intent(getActivity(), ApplyInfoActivity.class);
+        startActivity(intent);
     }
 }
 

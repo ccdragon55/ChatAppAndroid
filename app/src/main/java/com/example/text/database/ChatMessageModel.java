@@ -86,10 +86,7 @@ public class ChatMessageModel extends DBManager{
      * @return List\<Map\<String,Object\>\>，每项包含 chat_message + avatar 表字段（已驼峰化）
      */
     public List<Map<String, Object>> selectChatMessageByPage(String sessionId, int currentPage, int pageSize, long startTime) {
-        String sql = "SELECT cm.*, a.url AS avatarUrl FROM chat_message cm " +
-                "LEFT JOIN avatar a ON cm.send_user_id = a.id " +
-                "WHERE cm.user_id = ? AND cm.session_id = ? AND cm.send_time < ? " +
-                "ORDER BY cm.send_time DESC LIMIT ?, ?";
+        String sql = "SELECT * from chat_message cm left join avatar a on cm.send_user_id = a.id  where user_id=? and session_id=? and send_time<? ORDER BY send_time DESC limit ?,?";
         String[] params = {
                 String.valueOf(Store.getInstance(context).getUserId()),
                 String.valueOf(sessionId),

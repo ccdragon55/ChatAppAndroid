@@ -24,7 +24,7 @@ import com.example.text.dataModel.ApplyInfoItem;
 public class ApplyDetailDialogFragment extends DialogFragment {
 
     private static final String ARG_MESSAGE = "message";
-    private Message message;
+    private ApplyInfoItem message;
     private OnActionClickListener listener;
 
     // 定义消息实体类
@@ -76,8 +76,8 @@ public class ApplyDetailDialogFragment extends DialogFragment {
 
         // 设置数据
         if (message != null) {
-            tvNickname.setText(message.nickname);
-            tvApplyInfo.setText(message.applyInfo);
+            tvNickname.setText(message.getApplyUserNickName());
+            tvApplyInfo.setText(message.getApplyInfo());
         }
 
         // 设置按钮点击

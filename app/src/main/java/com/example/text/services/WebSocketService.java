@@ -272,7 +272,7 @@ public class WebSocketService extends Service {
 //                        messagesList.add(map);
                         messagesList.add(JsonUtils.jsonToStrObjMap(jo));
                     }
-//                    chatMessageModel.saveChatMessageBatch(messagesList);
+                    chatMessageModel.saveChatMessageBatch(messagesList);
                     Map<String,Object> info=new HashMap<>();
                     info.put("messageType",message.get("messageType"));
                     broadcast("receiveMessage",info);

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,25 +43,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GroupListActivity extends AppCompatActivity {
-
+    private ImageButton btnBack;
     private FriendListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private Map<String, Integer> mLetterPositions = new HashMap<>();
     private List<FriendListItem> friendList;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_list);
 
+        btnBack=findViewById(R.id.btn_back);
+
         // 初始化RecyclerView
-        RecyclerView rvFriends = findViewById(R.id.rv_friends);
+        RecyclerView rvFriends = findViewById(R.id.rv_groupList);
         mLayoutManager = new LinearLayoutManager(this);
         rvFriends.setLayoutManager(mLayoutManager);
 
         friendList=new ArrayList<>();
-        fetchContacts();
 
 //        mAdapter = new FriendListAdapter(generateData());
         mAdapter = new FriendListAdapter(friendList);
@@ -97,19 +99,29 @@ public class GroupListActivity extends AppCompatActivity {
 //                tvLetterHint.setVisibility(View.GONE);
             }
         });
+
+        fetchContacts();
+
+        btnBack.setOnClickListener(v->finish());
     }
 
     private void fetchContacts(){
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        //TODO
-        Call<FetchContactsResponse> call = apiService.getContact(Store.getInstance(getApplicationContext()).getData("token"));
+        Call<FetchContactsResponse> call = apiService.getGroupContact(Store.getInstance(getApplicationContext()).getData("token"));
 
         call.enqueue(new Callback<FetchContactsResponse>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<FetchContactsResponse> call, @NonNull Response<FetchContactsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    friendList = response.body().getData();
+                    friendList.clear();
+                    friendList.addAll(response.body().getData());
+                    for(FriendListItem item:friendList){
+                        item.generateFirstLetter();
+                    }
                     FriendListItem.sortByFiestLetter(friendList);
+                    mAdapter.processData(friendList);
+                    mAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(GroupListActivity.this, "网络错误: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

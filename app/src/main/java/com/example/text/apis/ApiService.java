@@ -75,9 +75,11 @@ public interface ApiService {
     @POST("/contact/searchApply")
     Call<FetchApplyInfoResponse> searchApply(@Body UserIdRequest request, @Header("token") String token );
 
-    //TODO
-    @POST("/contact/getContact")
-    Call<FetchContactsResponse> getContact(@Header("token") String token );
+    @POST("/contact/getUserContact")
+    Call<FetchContactsResponse> getUserContact(@Header("token") String token );
+
+    @POST("/contact/getGroupContact")
+    Call<FetchContactsResponse> getGroupContact(@Header("token") String token );
 
 //    @POST("/contact/getContact")
 //    Call<FriendListResponse> getFriendList(@Header("token") String token);

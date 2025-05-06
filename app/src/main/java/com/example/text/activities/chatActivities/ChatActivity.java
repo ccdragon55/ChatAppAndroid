@@ -140,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
                 ChatMessage chatMessage=new ChatMessage(message);
                 chatMessage.setDate(DateUtils.formatDate(chatMessage.getSendTime()));
                 messageList.add(chatMessage);
+                adapter.notifyItemInserted(messageList.size() - 1);
             }
         }
 

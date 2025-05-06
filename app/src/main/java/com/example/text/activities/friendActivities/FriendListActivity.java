@@ -90,7 +90,7 @@ public class FriendListActivity extends AppCompatActivity {
 
     private void fetchContacts(){
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        Call<FetchContactsResponse> call = apiService.getContact(Store.getInstance(getApplicationContext()).getData("token"));
+        Call<FetchContactsResponse> call = apiService.getUserContact(Store.getInstance(getApplicationContext()).getData("token"));
 
         call.enqueue(new Callback<FetchContactsResponse>() {
             @Override

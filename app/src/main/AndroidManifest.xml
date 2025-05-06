@@ -116,6 +116,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.friendActivities.GroupListActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.friendActivities.ApplyInfoActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".activities.notificationsActivity.NotificationsFragment"
             android:exported="true">
             <intent-filter>

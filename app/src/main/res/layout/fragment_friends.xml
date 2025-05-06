@@ -50,13 +50,22 @@
                     android:text="群聊"
                     android:textSize="20sp"
                     android:gravity="center" />
+
+                <Button
+                    android:id="@+id/btn_applyList"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="申请信息"
+                    android:textSize="20sp"
+                    android:gravity="center" />
             </LinearLayout>
 
             <!-- 好友列表 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_friends"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
