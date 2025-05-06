@@ -136,7 +136,7 @@ public class ChatActivity extends AppCompatActivity {
         private void handleReceiveSingleMessage(String json) throws JSONException {
             JSONObject jsonObject=new JSONObject(json);
             Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
-            if(sessionId==message.get("sessionId")){
+            if(Objects.equals(sessionId, (String) message.get("sessionId"))){
                 ChatMessage chatMessage=new ChatMessage(message);
                 chatMessage.setDate(DateUtils.formatDate(chatMessage.getSendTime()));
                 messageList.add(chatMessage);
@@ -278,8 +278,8 @@ public class ChatActivity extends AppCompatActivity {
 
         // 格式化日期字段
         for (int i=0;i<messageList.size();++i) {
-            messageData.get(i).setDate(DateUtils.formatDate(messageData.get(i).getSendTime()));
-            messageData.get(i).setShowDate(notSameDate(i));
+            messageList.get(i).setDate(DateUtils.formatDate(messageList.get(i).getSendTime()));
+            messageList.get(i).setShowDate(notSameDate(i));
         }
 
         Log.e("fk","messageList:"+messageList.toString());

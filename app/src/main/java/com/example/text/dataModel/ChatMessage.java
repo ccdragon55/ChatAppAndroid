@@ -55,36 +55,115 @@ public class ChatMessage {
     }
 
     public ChatMessage(Map<String, Object> map) {
-        this.userId = (String) map.getOrDefault("userId", "");
-        Object messageIdValue = map.getOrDefault("messageId", 0);
-        this.messageId = (messageIdValue instanceof Long) ? (long) messageIdValue : 0;
-        this.sessionId = (String) map.getOrDefault("sessionId", "");
-        Object messageTypeValue = map.getOrDefault("contactType", 0);
-        this.messageType = (messageTypeValue instanceof Integer) ? (int) messageTypeValue : 0;
-        this.messageContent = (String) map.getOrDefault("messageContent", "");
-        Object contactTypeValue = map.getOrDefault("contactType", 0);
-        this.contactType = (contactTypeValue instanceof Integer) ? (int) contactTypeValue : 0;
-        this.sendUserId = (String) map.getOrDefault("sendUserId", "");
-        this.sendUserNickName = (String) map.getOrDefault("sendUserNickName", "");
-        Object sendTimeValue = map.getOrDefault("contactType", 0);
-        this.sendTime = (sendTimeValue instanceof Long) ? (long) sendTimeValue : 0;
-        Object statusValue = map.getOrDefault("contactType", 0);
-        this.status = (statusValue instanceof Integer) ? (int) statusValue : 0;
-        Object fileSizeValue = map.getOrDefault("contactType", 0);
-        this.fileSize = (fileSizeValue instanceof Long) ? (long) fileSizeValue : 0;
-        this.fileName = (String) map.getOrDefault("fileName", "");
-        this.filePath = (String) map.getOrDefault("filePath", "");
-        Object fileTypeValue = map.getOrDefault("contactType", 0);
-        this.fileType = (fileTypeValue instanceof Integer) ? (int) fileTypeValue : 0;
-        this.url = (String) map.getOrDefault("url", "");
-        if(sendUserId==null){
-            type=TYPE_SYSTEM;
-        }else if(sendUserId.equals(userId)){
-            type=TYPE_SENT_TEXT;
-        }else{
-            type=TYPE_RECEIVED_TEXT;
+        this.userId = Objects.toString(map.get("userId"), "");
+
+        Object messageIdValue = map.get("messageId");
+        if (messageIdValue instanceof Long) {
+            this.messageId = (long) messageIdValue;
+        } else if (messageIdValue instanceof Integer) {
+            this.messageId = (Long) messageIdValue; // 需要强转
+        } else {
+            this.messageId = 0;
+        }
+
+        this.sessionId = Objects.toString(map.get("sessionId"), "");
+
+        Object messageTypeObj = map.get("contactType");
+        if (messageTypeObj instanceof Integer) {
+            this.messageType = (int) messageTypeObj;
+        } else {
+            this.messageType = 0;
+        }
+
+        this.messageContent = Objects.toString(map.get("messageContent"), "");
+
+        Object contactTypeObj = map.get("contactType");
+        if (contactTypeObj instanceof Integer) {
+            this.contactType = (int) contactTypeObj;
+        } else {
+            this.contactType = 0;
+        }
+
+        this.sendUserId = Objects.toString(map.get("sendUserId"), "");
+        this.sendUserNickName = Objects.toString(map.get("sendUserNickName"), "");
+
+        Object sendTimeObj = map.get("contactType");
+        if (sendTimeObj instanceof Long) {
+            this.sendTime = (long) sendTimeObj;
+        } else if (sendTimeObj instanceof Integer) {
+            this.sendTime = ((Integer) sendTimeObj).longValue();
+        } else {
+            this.sendTime = 0;
+        }
+
+        Object statusObj = map.get("contactType");
+        if (statusObj instanceof Integer) {
+            this.status = (int) statusObj;
+        } else {
+            this.status = 0;
+        }
+
+        Object fileSizeObj = map.get("contactType");
+        if (fileSizeObj instanceof Long) {
+            this.fileSize = (long) fileSizeObj;
+        } else if (fileSizeObj instanceof Integer) {
+            this.fileSize = ((Integer) fileSizeObj).longValue();
+        } else {
+            this.fileSize = 0;
+        }
+
+        this.fileName = Objects.toString(map.get("fileName"), "");
+        this.filePath = Objects.toString(map.get("filePath"), "");
+        this.url = Objects.toString(map.get("url"), "");
+
+        Object fileTypeObj = map.get("contactType");
+        if (fileTypeObj instanceof Integer) {
+            this.fileType = (int) fileTypeObj;
+        } else {
+            this.fileType = 0;
+        }
+
+        // 根据sendUserId是否为空设置类型
+        if (sendUserId.isEmpty()) {
+            this.type = TYPE_SYSTEM;
+        } else if (sendUserId.equals(userId)) {
+            this.type = TYPE_SENT_TEXT;
+        } else {
+            this.type = TYPE_RECEIVED_TEXT;
         }
     }
+
+//    public ChatMessage(Map<String, Object> map) {
+//        this.userId = (String) map.getOrDefault("userId", "");
+//        Object messageIdValue = map.getOrDefault("messageId", 0);
+//        this.messageId = (messageIdValue instanceof Long) ? (long) messageIdValue : 0;
+//        this.sessionId = (String) map.getOrDefault("sessionId", "");
+//        Object messageTypeValue = map.getOrDefault("contactType", 0);
+//        this.messageType = (messageTypeValue instanceof Integer) ? (int) messageTypeValue : 0;
+//        this.messageContent = (String) map.getOrDefault("messageContent", "");
+//        Object contactTypeValue = map.getOrDefault("contactType", 0);
+//        this.contactType = (contactTypeValue instanceof Integer) ? (int) contactTypeValue : 0;
+//        this.sendUserId = (String) map.getOrDefault("sendUserId", "");
+//        this.sendUserNickName = (String) map.getOrDefault("sendUserNickName", "");
+//        Object sendTimeValue = map.getOrDefault("contactType", 0);
+//        this.sendTime = (sendTimeValue instanceof Long) ? (long) sendTimeValue : 0;
+//        Object statusValue = map.getOrDefault("contactType", 0);
+//        this.status = (statusValue instanceof Integer) ? (int) statusValue : 0;
+//        Object fileSizeValue = map.getOrDefault("contactType", 0);
+//        this.fileSize = (fileSizeValue instanceof Long) ? (long) fileSizeValue : 0;
+//        this.fileName = (String) map.getOrDefault("fileName", "");
+//        this.filePath = (String) map.getOrDefault("filePath", "");
+//        Object fileTypeValue = map.getOrDefault("contactType", 0);
+//        this.fileType = (fileTypeValue instanceof Integer) ? (int) fileTypeValue : 0;
+//        this.url = (String) map.getOrDefault("url", "");
+//        if(sendUserId==null){
+//            type=TYPE_SYSTEM;
+//        }else if(sendUserId.equals(userId)){
+//            type=TYPE_SENT_TEXT;
+//        }else{
+//            type=TYPE_RECEIVED_TEXT;
+//        }
+//    }
 
     public int getType() {
         return type;
