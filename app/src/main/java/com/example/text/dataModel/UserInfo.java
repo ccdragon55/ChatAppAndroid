@@ -1,5 +1,7 @@
 package com.example.text.dataModel;
 
+import androidx.annotation.Nullable;
+
 public class UserInfo {
     private Boolean admin;
     private Integer contactStatus;
@@ -11,7 +13,12 @@ public class UserInfo {
     private String userId;
     private String avatarUrl;
 
-    public UserInfo(Boolean admin, Integer contactStatus, Integer joinType, String nickName, String personalSignature, Integer sex, String token, String userId, String avatarUrl) {
+    public UserInfo(String userId, String avatarUrl) {
+        this.userId = userId;
+        this.avatarUrl = avatarUrl;
+    }
+
+    public UserInfo(@Nullable Boolean admin,@Nullable Integer contactStatus,@Nullable Integer joinType,@Nullable String nickName,@Nullable String personalSignature,@Nullable Integer sex,@Nullable String token, String userId, String avatarUrl) {
         this.admin = admin;
         this.contactStatus = contactStatus;
         this.joinType = joinType;

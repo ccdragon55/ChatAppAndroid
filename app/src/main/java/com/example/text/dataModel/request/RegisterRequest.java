@@ -4,15 +4,15 @@ public class RegisterRequest {
     String checkCodeKey;
     String email;
     String password;
-    String username;
-    String verificationCode;
+    String nickname;
+    String checkCode;
 
-    public RegisterRequest(String checkCodeKey, String email, String password, String username, String verificationCode) {
+    public RegisterRequest(String checkCodeKey, String email, String password, String nickname, String checkCode) {
         this.checkCodeKey = checkCodeKey;
         this.email = email;
         this.password = password;
-        this.username = username;
-        this.verificationCode = verificationCode;
+        this.nickname = nickname;
+        this.checkCode = checkCode;
     }
 
     public String getCheckCodeKey() {
@@ -39,20 +39,20 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getVerificationCode() {
-        return verificationCode;
+    public String getCheckCode() {
+        return checkCode;
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
+    public void setCheckCode(String checkCode) {
+        this.checkCode = checkCode;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class RegisterRequest {
                 "checkCodeKey='" + checkCodeKey + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", username='" + username + '\'' +
-                ", verificationCode='" + verificationCode + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", checkCode='" + checkCode + '\'' +
                 '}';
     }
 }

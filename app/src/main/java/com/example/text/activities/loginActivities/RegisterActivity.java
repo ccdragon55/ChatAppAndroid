@@ -32,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText etUsername, etEmail, etPassword, etVerificationCode;
+    private EditText etUsername, etEmail, etPassword, etConfirmPassword, etVerificationCode;
     private ImageView ivCheckCode;
     private Button btnRegister;
     private CountDownTimer countDownTimer;
@@ -46,14 +46,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+        sendVerificationCode();
         sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
     }
 
     private void initViews() {
         etUsername = findViewById(R.id.etRegUsername);
         etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etVerificationCode = findViewById(R.id.etConfirmPassword);
+        etPassword = findViewById(R.id.etRegPassword);
+        etConfirmPassword = findViewById(R.id.etConfirmPassword);
+        etVerificationCode = findViewById(R.id.etCheckCodeInput);
         ivCheckCode = findViewById(R.id.ivCheckCode);
         btnRegister = findViewById(R.id.btnRegister);
     }
@@ -120,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
+        String ConfirmPassword = etConfirmPassword.getText().toString().trim();
         String verificationCode = etVerificationCode.getText().toString().trim();
 
         if (!validateInput(username, email, password, verificationCode)) return;
@@ -153,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void handleRegistrationSuccess(RegisterResponse response) {
-        if (response.getData() == null) {
+        if (response.getData() != null) {
             // 保存用户数据
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("userId", response.getData().getUserId());
@@ -164,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
             avatarModel.saveAvatar(response.getData().getUserId(),response.getData().getAvatarUrl());
 
             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
+//            startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
             Toast.makeText(this, "网络错误", Toast.LENGTH_SHORT).show();
