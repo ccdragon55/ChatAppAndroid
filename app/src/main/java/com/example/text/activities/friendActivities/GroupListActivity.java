@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.text.activities.profileActivities.FriendProfileActivity;
+import com.example.text.activities.profileActivities.GroupProfileActivity;
 import com.example.text.adapters.FriendListAdapter;
 import com.example.text.R;
 import com.example.text.apis.ApiService;
@@ -137,7 +138,7 @@ public class GroupListActivity extends AppCompatActivity {
             // 根据 position 获取数据
             FriendListItem friendListItem= mAdapter.getFriendListItem(position);
             //TODO
-            Intent intent = new Intent(this, FriendProfileActivity.class);
+            Intent intent = new Intent(this, GroupProfileActivity.class);
             intent.putExtra("friendName", friendListItem.getContactName());
             startActivity(intent);
         });
