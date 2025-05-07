@@ -1,19 +1,17 @@
 package com.example.text.activities.friendActivities;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,16 +19,15 @@ import com.example.text.activities.profileActivities.FriendProfileActivity;
 import com.example.text.adapters.FriendListAdapter;
 import com.example.text.R;
 import com.example.text.apis.ApiService;
-import com.example.text.dataModel.CreateGroupResponseInfo;
 import com.example.text.dataModel.FriendListItem;
-import com.example.text.dataModel.request.AddFriendRequest;
-import com.example.text.dataModel.request.CreateGroupRequest;
-import com.example.text.dataModel.response.CreateGroupResponse;
 import com.example.text.dataModel.response.FetchContactsResponse;
-import com.example.text.database.AvatarModel;
 import com.example.text.retrofits.RetrofitClient;
+import com.example.text.utils.JsonUtils;
 import com.example.text.utils.Store;
 import com.example.text.views.SideBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +45,75 @@ public class GroupListActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
     private Map<String, Integer> mLetterPositions = new HashMap<>();
     private List<FriendListItem> friendList;
+
+    private BroadcastReceiver wsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            String json = intent.getStringExtra("dataJson"); // 公共字段
+
+            try {
+                // 根据 Action 分发不同逻辑
+                if (action == null) return;
+
+                switch (action) {
+                    case "ACTION_WS_addNewGroup":
+                        handleAddNewGroup(json);
+                        break;
+                    case "ACTION_WS_receiveChangeGroupNameMessage":
+                        handleReceiveChangeGroupNameMessage(json);
+                        break;
+                    default:
+                        break;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void handleAddNewGroup(String json) throws JSONException {
+            JSONObject jsonObject=new JSONObject(json);
+            Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
+            FriendListItem friendListItem=new FriendListItem(message);
+            friendList.add(friendListItem);
+            FriendListItem.sortByFirstLetter(friendList);
+            mAdapter.processData(friendList);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void handleReceiveChangeGroupNameMessage(String json) throws JSONException {
+            JSONObject jsonObject=new JSONObject(json);
+            Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
+            String contactId=(String)message.get("contactId");
+
+            for (int i = 0; i < friendList.size(); ++i) {
+                if (Objects.equals(friendList.get(i).getContactId(), contactId)) {
+                    friendList.get(i).setContactName((String)message.get("contactName"));
+                    friendList.get(i).generateFirstLetter();
+                }
+            }
+            FriendListItem.sortByFirstLetter(friendList);
+            mAdapter.processData(friendList);
+            mAdapter.notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("ACTION_WS_addNewGroup");
+        filter.addAction("ACTION_WS_receiveChangeGroupNameMessage");
+        LocalBroadcastManager.getInstance(this).registerReceiver(wsReceiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(wsReceiver);
+    }
 
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
@@ -119,7 +185,7 @@ public class GroupListActivity extends AppCompatActivity {
                     for(FriendListItem item:friendList){
                         item.generateFirstLetter();
                     }
-                    FriendListItem.sortByFiestLetter(friendList);
+                    FriendListItem.sortByFirstLetter(friendList);
                     mAdapter.processData(friendList);
                     mAdapter.notifyDataSetChanged();
                 } else {

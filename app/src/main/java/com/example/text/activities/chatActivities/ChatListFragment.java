@@ -1,5 +1,6 @@
 package com.example.text.activities.chatActivities;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,14 +52,16 @@ public class ChatListFragment extends Fragment {
                     case "ACTION_WS_receiveMessage":
                         handleReceiveMessage(json);
                         break;
+                    case "ACTION_WS_receiveNewSession":
+                        handleReceiveNewSession(json);
+                        break;
                     case "ACTION_WS_receiveSingleMessageUpdateChatSession":
                         handleReceiveSingleMessageUpdateChatSession(json);
                         break;
-                    case "ACTION_WS_MESSAGE_RECEIVED":
-                        handleMessageReceived(json);
+                    case "ACTION_WS_changeGroupNameReturn":
+                        handleChangeGroupNameReturn();
                         break;
                     default:
-                        // 未知 Action 处理
                         break;
                 }
             } catch (JSONException e) {
@@ -70,12 +73,20 @@ public class ChatListFragment extends Fragment {
             JSONObject jsonObject=new JSONObject(json);
             Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
             Object object=message.get("messageType");
-            int messageType=object instanceof Integer?(int)object:-1;
+            int messageType=object instanceof Long?((Long)object).intValue():-1;
             if(messageType==0){
                 loadChatSession();
             }
         }
 
+        private void handleReceiveNewSession(String json) throws JSONException {
+            JSONObject jsonObject=new JSONObject(json);
+            Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
+            sessionList.add(new SessionListItem(message));
+            SessionListItem.sortByLastReceiveTime(sessionList);
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
         private void handleReceiveSingleMessageUpdateChatSession(String json) throws JSONException {
             JSONObject jsonObject=new JSONObject(json);
             Map<String,Object> data= JsonUtils.jsonToStrObjMap(jsonObject);
@@ -96,17 +107,15 @@ public class ChatListFragment extends Fragment {
                 //该会话之前被删除
                 SessionListItem sessionListItem=new SessionListItem(data);
                 sessionListItem.addNoReadCount();
+                sessionListItem.setDate(DateUtils.formatDate(sessionListItem.getLastReceiveTime()));
                 sessionList.add(sessionListItem);
             }
             SessionListItem.sortByLastReceiveTime(sessionList);
+            adapter.notifyDataSetChanged();
         }
 
-        private void handleOrderCreated(String json) {
-            // 解析并处理订单创建逻辑
-        }
-
-        private void handleMessageReceived(String json) {
-            // 解析并处理消息接收逻辑
+        private void handleChangeGroupNameReturn() {
+            loadChatSession();
         }
     };
 
@@ -115,7 +124,9 @@ public class ChatListFragment extends Fragment {
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction("ACTION_WS_receiveMessage");
+        filter.addAction("ACTION_WS_receiveNewSession");
         filter.addAction("ACTION_WS_receiveSingleMessageUpdateChatSession");
+        filter.addAction("ACTION_WS_changeGroupNameReturn");
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(wsReceiver, filter);
     }
 
@@ -123,6 +134,14 @@ public class ChatListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(wsReceiver);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onStart(){
+        super.onStart();
+        loadChatSession();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -154,6 +173,9 @@ public class ChatListFragment extends Fragment {
             intent.putExtra("sendUserNickName", sessionListItem.getContactName());
             intent.putExtra("contactType", sessionListItem.getContactType());
             startActivity(intent);
+
+            sessionList.get(position).setNoReadCount(0);
+            chatSessionModel.clearNoReadCount(sessionListItem.getSessionId());
         });
         recyclerView.setAdapter(adapter);
 

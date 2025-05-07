@@ -15,8 +15,6 @@ import com.example.text.adapters.FriendListAdapter;
 import com.example.text.R;
 import com.example.text.apis.ApiService;
 import com.example.text.dataModel.FriendListItem;
-import com.example.text.dataModel.request.UserIdRequest;
-import com.example.text.dataModel.response.FetchApplyInfoResponse;
 import com.example.text.dataModel.response.FetchContactsResponse;
 import com.example.text.retrofits.RetrofitClient;
 import com.example.text.utils.Store;
@@ -97,7 +95,7 @@ public class FriendListActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<FetchContactsResponse> call, @NonNull Response<FetchContactsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     friendList = response.body().getData();
-                    FriendListItem.sortByFiestLetter(friendList);
+                    FriendListItem.sortByFirstLetter(friendList);
                 } else {
                     Toast.makeText(FriendListActivity.this, "网络错误: " + response.code(), Toast.LENGTH_SHORT).show();
                 }

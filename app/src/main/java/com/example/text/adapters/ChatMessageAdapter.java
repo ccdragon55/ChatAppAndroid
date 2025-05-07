@@ -55,9 +55,11 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ChatMessage message = messageList.get(position);
         if (holder instanceof SystemViewHolder){
             ((SystemViewHolder) holder).tvDateHeader.setVisibility(message.isShowDate()?View.VISIBLE:View.GONE);
+            ((SystemViewHolder) holder).tvDateHeader.setText(message.getDate());
             ((SystemViewHolder) holder).tvContent.setText(message.getMessageContent());
         }else if (holder instanceof LeftViewHolder) {
             ((LeftViewHolder) holder).tvDateHeader.setVisibility(message.isShowDate()?View.VISIBLE:View.GONE);
+            ((LeftViewHolder) holder).tvDateHeader.setText(message.getDate());
             ((LeftViewHolder) holder).tvContent.setText(message.getMessageContent());
             ((LeftViewHolder) holder).tvNickName.setText(message.getSendUserNickName());
             Glide.with(((LeftViewHolder) holder).ivAvatar.getContext())
@@ -66,6 +68,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(((LeftViewHolder) holder).ivAvatar);
         } else if (holder instanceof RightViewHolder) {
             ((RightViewHolder) holder).tvDateHeader.setVisibility(message.isShowDate()?View.VISIBLE:View.GONE);
+            ((RightViewHolder) holder).tvDateHeader.setText(message.getDate());
             ((RightViewHolder) holder).tvContent.setText(message.getMessageContent());
             ((RightViewHolder) holder).tvNickName.setText(message.getSendUserNickName());
             Glide.with(((RightViewHolder) holder).ivAvatar.getContext())

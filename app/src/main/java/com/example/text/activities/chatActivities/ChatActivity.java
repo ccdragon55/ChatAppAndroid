@@ -118,14 +118,7 @@ public class ChatActivity extends AppCompatActivity {
                     case "ACTION_WS_receiveSingleMessage":
                         handleReceiveSingleMessage(json);
                         break;
-//                    case "ACTION_WS_ORDER_CREATED":
-//                        handleOrderCreated(json);
-//                        break;
-//                    case "ACTION_WS_MESSAGE_RECEIVED":
-//                        handleMessageReceived(json);
-//                        break;
                     default:
-                        // 未知 Action 处理
                         break;
                 }
             } catch (JSONException e) {
@@ -143,18 +136,6 @@ public class ChatActivity extends AppCompatActivity {
                 adapter.notifyItemInserted(messageList.size() - 1);
             }
         }
-
-        private void handleUserUpdate(String json) {
-            // 解析并处理用户更新逻辑
-        }
-
-        private void handleOrderCreated(String json) {
-            // 解析并处理订单创建逻辑
-        }
-
-        private void handleMessageReceived(String json) {
-            // 解析并处理消息接收逻辑
-        }
     };
 
     @Override
@@ -162,8 +143,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction("ACTION_WS_receiveSingleMessage");
-//        filter.addAction("ACTION_WS_ORDER_CREATED");
-//        filter.addAction("ACTION_WS_MESSAGE_RECEIVED");
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(wsReceiver, filter);
     }
 
@@ -232,14 +211,24 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // 监听滚动事件
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+//
+//                if (currentPage < totalMessage) {
+//                    loadChatMessageData();
+//                }
+//            }
+//        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-
-                if (currentPage < totalMessage) {
-                    loadChatMessageData();
+                if (!recyclerView.canScrollVertically(-1)) {
+                    if (currentPage < totalMessage) {
+                        loadChatMessageData();
+                    }
                 }
             }
         });
@@ -329,12 +318,15 @@ public class ChatActivity extends AppCompatActivity {
 
                     new Thread(() -> dbManager.insertOrReplace("chat_message", data)).start();
                     new Thread(() -> chatSessionModel.updateChatSessionLastInfo(contactId, (String) data.get("messageContent"), (long) data.get("sendTime"))).start();
+//                    chatSessionModel.updateChatSessionLastInfo(contactId, (String) data.get("messageContent"), (long) data.get("sendTime"));
 
                     etInput.setText("");
 
-                    data.put("date", DateUtils.formatDate((long) data.get("sendTime")));
+//                    data.put("date", DateUtils.formatDate((long) data.get("sendTime")));
                     data.put("url", sharedPreferences.getString("selfAvatarUrl", ""));
                     messageList.add(new ChatMessage(data));
+                    messageList.get(messageList.size() - 1).setDate(DateUtils.formatDate((long) messageList.get(messageList.size() - 1).getSendTime()));
+                    messageList.get(messageList.size() - 1).setShowDate(notSameDate(messageList.size() - 1));
 
                     runOnUiThread(() -> {
                         adapter.notifyItemInserted(messageList.size() - 1);
@@ -362,6 +354,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private boolean notSameDate(int index) {
-        return index == 0 || !Objects.equals(messageList.get(index).getDate(), messageList.get(index).getDate());
+        return index == 0 || !Objects.equals(messageList.get(index).getDate(), messageList.get(index-1).getDate());
     }
 }

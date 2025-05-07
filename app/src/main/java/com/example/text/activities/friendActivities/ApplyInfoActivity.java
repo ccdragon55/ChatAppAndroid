@@ -1,12 +1,17 @@
 package com.example.text.activities.friendActivities;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,16 +23,22 @@ import com.example.text.activities.profileActivities.ProfileActivity;
 import com.example.text.adapters.ApplyInfoAdapter;
 import com.example.text.apis.ApiService;
 import com.example.text.dataModel.ApplyInfoItem;
+import com.example.text.dataModel.FriendListItem;
 import com.example.text.dataModel.request.DealWithApplyRequest;
 import com.example.text.dataModel.request.UserIdRequest;
 import com.example.text.dataModel.response.AvatarResponse;
 import com.example.text.dataModel.response.FetchApplyInfoResponse;
 import com.example.text.database.AvatarModel;
 import com.example.text.retrofits.RetrofitClient;
+import com.example.text.utils.JsonUtils;
 import com.example.text.utils.Store;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -39,6 +50,42 @@ public class ApplyInfoActivity extends AppCompatActivity implements ApplyInfoAda
     private RecyclerView recyclerView;
     private ApplyInfoAdapter adapter;
     private List<ApplyInfoItem> requests;
+
+    private BroadcastReceiver wsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            // 根据 Action 分发不同逻辑
+            if (action == null) return;
+
+            switch (action) {
+                case "ACTION_WS_receiveNewApply":
+                    handleReceiveNewApply();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void handleReceiveNewApply(){
+            fetchApplyInfo();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("ACTION_WS_receiveNewApply");
+        LocalBroadcastManager.getInstance(this).registerReceiver(wsReceiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(wsReceiver);
+    }
 
     @SuppressLint("MissingInflatedId")
     @Override

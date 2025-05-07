@@ -137,6 +137,7 @@ public class WebSocketService extends Service {
 
     @Override
     public void onDestroy() {
+        stopForeground(true);
         super.onDestroy();
         isRunning = false;
         if (ws != null) {

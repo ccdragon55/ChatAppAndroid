@@ -2,6 +2,7 @@ package com.example.text.dataModel;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SessionListItem {
     private String userId;
@@ -33,24 +34,24 @@ public class SessionListItem {
     }
 
     public SessionListItem(Map<String, Object> map) {
-        this.userId = (String) map.getOrDefault("userId", "");
-        this.contactId = (String) map.getOrDefault("contactId", "");
+        this.userId = Objects.toString(map.get("userId"), "");
+        this.contactId = Objects.toString(map.get("contactId"), "");
         Object contactTypeValue = map.getOrDefault("contactType", 0);
-        this.contactType = (contactTypeValue instanceof Integer) ? (int) contactTypeValue : 0;
-        this.sessionId = (String) map.getOrDefault("sessionId", "");
+        this.contactType = (contactTypeValue instanceof Long) ? ((Long) contactTypeValue).intValue() : 0;
+        this.sessionId = Objects.toString(map.get("sessionId"), "");
         Object statusValue = map.getOrDefault("status", 1);
-        this.status = (statusValue instanceof Integer) ? (int) statusValue : 1;
-        this.contactName = (String) map.getOrDefault("contactName", "");
-        this.lastMessage = (String) map.getOrDefault("lastMessage", "");
+        this.status = (statusValue instanceof Long) ? ((Long) statusValue).intValue() : 1;
+        this.contactName = Objects.toString(map.get("contactName"), "");
+        this.lastMessage = Objects.toString(map.get("lastMessage"), "");
         Object lastReceiveTimeValue = map.getOrDefault("lastReceiveTime", 0);
         this.lastReceiveTime = (lastReceiveTimeValue instanceof Long) ? (long) lastReceiveTimeValue : 0;
         Object noReadCountValue = map.getOrDefault("noReadCount", 0);
-        this.noReadCount = (noReadCountValue instanceof Integer) ? (int) noReadCountValue : 0;
+        this.noReadCount = (noReadCountValue instanceof Long) ? ((Long) noReadCountValue).intValue() : 0;
         Object memberCountValue = map.getOrDefault("memberCount", 1);
-        this.memberCount = (memberCountValue instanceof Integer) ? (int) memberCountValue : 1;
+        this.memberCount = (memberCountValue instanceof Long) ? ((Long) memberCountValue).intValue() : 1;
         Object topTypeValue = map.getOrDefault("topType", 0);
-        this.topType = (topTypeValue instanceof Integer) ? (int) topTypeValue : 0;
-        this.avatarUrl =(String) map.getOrDefault("avatarUrl", "");
+        this.topType = (topTypeValue instanceof Long) ? ((Long) topTypeValue).intValue() : 0;
+        this.avatarUrl = Objects.toString(map.get("avatarUrl"), "");
     }
 
     public String getUserId() {

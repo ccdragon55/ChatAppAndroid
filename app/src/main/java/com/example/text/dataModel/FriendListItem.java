@@ -12,6 +12,7 @@ import com.github.promeg.pinyinhelper.Pinyin;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class FriendListItem {
@@ -78,6 +79,13 @@ public class FriendListItem {
         }
     }
 
+    public FriendListItem(Map<String, Object> map) {
+        this.contactId = Objects.toString(map.get("contactId"), "");
+        this.contactName = Objects.toString(map.get("contactName"), "");
+        this.avatarUrl = Objects.toString(map.get("avatarUrl"), "");
+        generateFirstLetter();
+    }
+
     public String getContactId() {
         return contactId;
     }
@@ -124,7 +132,7 @@ public class FriendListItem {
         }
     }
 
-    public static void sortByFiestLetter(List<FriendListItem> list){
+    public static void sortByFirstLetter(List<FriendListItem> list){
         Collections.sort(list, (f1, f2) ->{
             if(Objects.equals(f1.getFirstLetter(), "#") && Objects.equals(f2.getFirstLetter(), "#")){
                 return f1.getContactName().compareTo(f2.getContactName());
@@ -172,7 +180,7 @@ public class FriendListItem {
         // 按首字母排序
 //        Collections.sort(list, (f1, f2) ->
 //                f1.getFirstLetter().compareTo(f2.getFirstLetter()));
-        sortByFiestLetter(list);
+        sortByFirstLetter(list);
         return list;
     }
 

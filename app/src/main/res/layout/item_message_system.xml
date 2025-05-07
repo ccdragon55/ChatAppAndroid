@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv_content_system"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:gravity="center"
-    android:textColor="#888"
-    android:textSize="12sp" />
+    android:orientation="vertical">
+    <!-- 日期标签，默认隐藏 -->
+    <TextView
+        android:id="@+id/tv_DateHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:gravity="center"
+        android:textColor="#888"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tv_content_system"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="center"
+        android:textColor="#888"
+        android:textSize="12sp" />
+</LinearLayout>

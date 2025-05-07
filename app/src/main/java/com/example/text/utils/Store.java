@@ -1,5 +1,7 @@
 package com.example.text.utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -76,6 +78,13 @@ public class Store {
         if (userId != null) {
             editor.remove(userId + "_" + key).apply();
         }
+    }
+
+    /**
+     * 清空Store
+     */
+    public void clear(){
+        editor.clear().apply();
     }
 }
 

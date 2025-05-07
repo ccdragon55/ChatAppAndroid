@@ -25,8 +25,8 @@
             android:layout_height="30dp"
             android:layout_gravity="top|end"
             app:nbMaxTextLength="2"
-            app:nbEllipsizeText="…"
-            app:nbAnimationEnabled="true"/>
+            app:nbEllipsizeText="…" />
+<!--        app:nbAnimationEnabled="true"-->
     </FrameLayout>
 
 <!--    &lt;!&ndash;显示头像&ndash;&gt;-->
