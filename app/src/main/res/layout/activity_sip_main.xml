@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="16dp">
+
+    <EditText
+        android:id="@+id/sip_address_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter SIP address (e.g., user@sip.linphone.org)"
+        android:inputType="textUri" />
+
+    <Button
+        android:id="@+id/audio_call_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Audio Call" />
+
+    <Button
+        android:id="@+id/video_call_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Video Call" />
+
+    <EditText
+        android:id="@+id/sip_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="用户名"
+        android:inputType="textUri" />
+
+    <EditText
+        android:id="@+id/sip_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="密码"
+        android:inputType="textUri" />
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册" />
+</LinearLayout>

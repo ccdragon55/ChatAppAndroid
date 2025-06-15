@@ -35,6 +35,12 @@ android {
     }
 }
 
+//repositories {
+//    flatDir {
+//        dirs("libs")
+//    }
+//}
+
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -70,6 +76,17 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.16.0") // 使用最新版本
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0") // 如果需要注解处理
+
+    //linphone
+//    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+//    // 或者指定具体 AAR 文件
+//    implementation(files("libs/linphone-sdk-android-5.4.0.aar"))
+    implementation ("org.linphone:linphone-sdk-android:5.4.0")
+    // 可选：注解库
+    implementation("org.jetbrains:annotations:24.0.1")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("androidx.media:media:1.6.0")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

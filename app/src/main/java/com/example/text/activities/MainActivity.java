@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.text.R;
 import com.example.text.activities.loginActivities.LoginActivity;
+import com.example.text.sip.test.SipMainActivity;
 
 public class MainActivity extends AppCompatActivity {
 //    private Button gotoGreetingPageBtn;
@@ -19,8 +20,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //原版
+//        Intent intent=new Intent();
+//        intent.setClass(MainActivity.this, LoginActivity.class);
+//        startActivity(intent);
+        //sip测试版
         Intent intent=new Intent();
-        intent.setClass(MainActivity.this, LoginActivity.class);
+        intent.setClass(MainActivity.this, SipMainActivity.class);
         startActivity(intent);
 
 //        gotoGreetingPageBtn=(Button)findViewById(R.id.gotoGreetingPageBtn);
