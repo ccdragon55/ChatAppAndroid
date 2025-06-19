@@ -50,14 +50,14 @@ public class SipMainActivity extends AppCompatActivity {
         audioCallButton.setOnClickListener(v -> {
             String destination = sipAddressInput.getText().toString();
             if (!destination.isEmpty()) {
-                LinphoneManager.getInstance(this).makeCall(destination, false);
+                LinphoneManager.getInstance(getApplicationContext()).makeCall(destination, false);
             }
         });
 
         videoCallButton.setOnClickListener(v -> {
             String destination = sipAddressInput.getText().toString();
             if (!destination.isEmpty()) {
-                LinphoneManager.getInstance(this).makeCall(destination, true);
+                LinphoneManager.getInstance(getApplicationContext()).makeCall(destination, true);
             }
         });
 
@@ -76,8 +76,8 @@ public class SipMainActivity extends AppCompatActivity {
 
     private void initializeLinphone() {
         // 初始化 Linphone 并注册
-        LinphoneManager manager = LinphoneManager.getInstance(this);
+        LinphoneManager manager = LinphoneManager.getInstance(getApplicationContext());
         //manager.createProxyConfig("your_username", "your_password", "10.129.156.163:5060", TransportType.Udp);
-        manager.createProxyConfig(etUsername.getText().toString(), etPassword.getText().toString(), "10.129.156.163:5060", TransportType.Udp);
+        manager.createProxyConfig(etUsername.getText().toString(), etPassword.getText().toString(), "10.129.156.163", TransportType.Udp);
     }
 }

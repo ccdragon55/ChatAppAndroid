@@ -27,9 +27,10 @@ public class IncomingCallActivity extends AppCompatActivity {
         Button declineButton = findViewById(R.id.decline_call);
 
         acceptButton.setOnClickListener(v -> {
-            Call call = LinphoneManager.getInstance(this).getCore().getCurrentCall();
+            Call call = LinphoneManager.getInstance(getApplicationContext()).getCore().getCurrentCall();
             if (call != null) {
                 try {
+                    call.setCameraEnabled(true);
                     call.accept();
                     startActivity(new Intent(this, CallActivity.class));
                     finish();
@@ -40,7 +41,7 @@ public class IncomingCallActivity extends AppCompatActivity {
         });
 
         declineButton.setOnClickListener(v -> {
-            Call call = LinphoneManager.getInstance(this).getCore().getCurrentCall();
+            Call call = LinphoneManager.getInstance(getApplicationContext()).getCore().getCurrentCall();
             if (call != null) {
                 try {
                     call.terminate();

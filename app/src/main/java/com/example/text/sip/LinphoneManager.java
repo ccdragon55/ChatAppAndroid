@@ -8,6 +8,9 @@ import com.example.text.sip.test.IncomingCallActivity;
 
 import org.linphone.core.*;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class LinphoneManager {
     private static LinphoneManager instance;
     private Core core;
@@ -20,14 +23,34 @@ public class LinphoneManager {
         factory.setDebugMode(true, "LinphoneDemo");
         core = factory.createCore(null, null, context);
 
+        core.setVideoCaptureEnabled(true);
+        core.setVideoDisplayEnabled(true);
+        core.setVideoPreviewEnabled(true);
+        core.setVideoSourceReuseEnabled(true);
+
         // 配置视频激活策略
-        VideoActivationPolicy videoPolicy = core.getVideoActivationPolicy();
-        if (videoPolicy == null) {
-            videoPolicy = factory.createVideoActivationPolicy();
-            videoPolicy.setAutomaticallyInitiate(true);
-            videoPolicy.setAutomaticallyAccept(true);
-            core.setVideoActivationPolicy(videoPolicy);
+        VideoActivationPolicy videoPolicy = core.getVideoActivationPolicy().clone();
+//        videoPolicy = factory.createVideoActivationPolicy();
+        videoPolicy.setAutomaticallyInitiate(true);
+        videoPolicy.setAutomaticallyAccept(true);
+        core.setVideoActivationPolicy(videoPolicy);
+
+        // 启用常用视频编解码器
+        for (PayloadType codec : core.getVideoPayloadTypes()) {
+            if (codec.getMimeType().equals("H264") || codec.getMimeType().equals("VP8")) {
+                codec.enable(true);
+                Log.d("Linphone", "Enabled codec: " + codec.getMimeType());
+            } else {
+                codec.enable(false);
+            }
         }
+
+        // 设置合理的视频分辨率
+        core.setPreferredVideoDefinitionByName("720p"); // 或 "VGA" 以降低带宽需求
+        core.setPreferredFramerate(15); // 设置较低帧率以提高兼容性
+
+        // 配置网络设置
+        core.setRtpBundleEnabled(true); // 优化 RTP 传
 
         core.start();
 
@@ -52,11 +75,21 @@ public class LinphoneManager {
                 }
             }
         });
+
+        TimerTask iterateTask = new TimerTask() {
+            @Override
+            public void run() {
+                core.iterate();
+            }
+        };
+        Timer timer = new Timer("Linphone Iterate");
+        timer.schedule(iterateTask, 0, 20);
     }
 
     public static synchronized LinphoneManager getInstance(Context context) {
         if (instance == null) {
-            instance = new LinphoneManager(context.getApplicationContext());
+//            instance = new LinphoneManager(context.getApplicationContext());
+            instance = new LinphoneManager(context);
         }
         return instance;
     }
@@ -70,9 +103,11 @@ public class LinphoneManager {
             // 创建 SIP 身份地址
             String identity = "sip:" + username + "@" + domain;
             Address identityAddress = Factory.instance().createAddress(identity);
+            identityAddress.setPort(5060);
 
             // 创建服务器地址
             Address serverAddress = Factory.instance().createAddress("sip:" + domain);
+            serverAddress.setPort(5060);
 
             // 创建 AccountParams
             AccountParams params = core.createAccountParams();
@@ -101,6 +136,7 @@ public class LinphoneManager {
             params.setVideoEnabled(isVideoCall);
             if (isVideoCall) {
                 params.setVideoDirection(MediaDirection.SendRecv); // 设置视频方向为发送和接收
+                params.setEarlyMediaSendingEnabled(true); // 启用早期媒体以便协商
             }
 
             // 优化低带宽网络
