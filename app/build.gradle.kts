@@ -22,11 +22,13 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "API_BASE_URL", "\"http://10.29.61.159:5050/\"")
+            buildConfigField("String", "SIP_BASE_URL", "\"http://10.129.156.163:8080/\"")
         }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigField("String", "API_BASE_URL", "\"http://10.29.61.159:5050/\"")
+            buildConfigField("String", "SIP_BASE_URL", "\"http://10.129.156.163:8080/\"")
         }
     }
     compileOptions {

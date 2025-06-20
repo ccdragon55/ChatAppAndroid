@@ -23,9 +23,11 @@ import com.example.text.dataModel.request.LoginRequest;
 import com.example.text.dataModel.response.LoginResponse;
 import com.example.text.dataModel.UserInfo;
 import com.example.text.services.WebSocketService;
+import com.example.text.sip.LinphoneManager;
 import com.example.text.utils.Store;
 
 import org.json.JSONObject;
+import org.linphone.core.TransportType;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -107,6 +109,8 @@ public class LoginActivity extends AppCompatActivity {
         fetchAvatar(userInfo.getUserId());
 
         startWebSocketService();
+
+        initializeLinphone("0"+userInfo.getUserId().substring(1),"123456");
 
         startActivity(new Intent(this, MenuActivity.class));
     }
@@ -203,6 +207,13 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             startService(serviceIntent);
         }
+    }
+
+    private void initializeLinphone(String user,String password) {
+        // 初始化 Linphone 并注册
+        LinphoneManager manager = LinphoneManager.getInstance(getApplicationContext());
+        //manager.createProxyConfig("your_username", "your_password", "10.129.156.163:5060", TransportType.Udp);
+        manager.createProxyConfig(user, password, "10.129.156.163", TransportType.Udp);
     }
 
 //    private void handleLogin() {

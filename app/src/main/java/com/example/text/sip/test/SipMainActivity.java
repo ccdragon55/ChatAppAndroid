@@ -4,16 +4,28 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.text.R;
+import com.example.text.activities.loginActivities.RegisterActivity;
+import com.example.text.apis.ApiService;
+import com.example.text.retrofits.RetrofitClient;
 import com.example.text.sip.LinphoneManager;
 
 import org.linphone.core.TransportType;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SipMainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 100;

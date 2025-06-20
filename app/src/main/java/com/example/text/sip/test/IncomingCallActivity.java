@@ -47,7 +47,7 @@ public class IncomingCallActivity extends AppCompatActivity {
         callerInfo = findViewById(R.id.caller_info);
         String remoteAddress = getIntent().getStringExtra("remoteAddress");
         boolean isVideoCall = getIntent().getBooleanExtra("isVideoCall",false);
-        showCallerInfo(remoteAddress.substring(4,16),isVideoCall);
+        showCallerInfo("U"+remoteAddress.substring(2,13),isVideoCall);
 
         // 接受和拒绝按钮
         Button acceptButton = findViewById(R.id.accept_call);
@@ -78,6 +78,9 @@ public class IncomingCallActivity extends AppCompatActivity {
             }
             finish();
         });
+
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
     }
 
     private void showCallerInfo(String userId,boolean isVideoCall){

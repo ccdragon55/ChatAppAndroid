@@ -84,12 +84,9 @@ public interface ApiService {
     @POST("/contact/getGroupContact")
     Call<FetchContactsResponse> getGroupContact(@Header("token") String token );
 
-    @POST("/asterisk/register")
-    Call<FetchContactsResponse> registerSipAccount(@Header("token") String token );
-
     @FormUrlEncoded
-    @POST("/account/register")
-    Call<ResponseBody> register(@Field("username") String username, @Field("password") String password);
+    @POST("/asterisk/register")
+    Call<ResponseBody> registerSipAccount(@Field("username") String username, @Field("password") String password);
 
 
 //    @POST("/contact/getContact")

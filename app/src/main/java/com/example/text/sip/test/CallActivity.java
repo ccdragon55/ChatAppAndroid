@@ -92,6 +92,7 @@ public class CallActivity extends AppCompatActivity {
                     }
                 }
                 if (state == Call.State.End || state == Call.State.Released) {
+                    Log.d("Call", "end");
                     runOnUiThread(() -> {
                         textViewInfo.setText("通话结束...");
                         chronometer.stop();

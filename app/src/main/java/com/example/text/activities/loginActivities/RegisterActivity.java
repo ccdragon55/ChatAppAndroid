@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -109,8 +110,8 @@ public class RegisterActivity extends AppCompatActivity {
         ivCheckCode.setEnabled(false);
         countDownTimer = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
-                String message=millisUntilFinished/1000 + "秒后重试";
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                String message=millisUntilFinished/1000 + "秒后重试";
+//                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
 
             public void onFinish() {
@@ -170,16 +171,18 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
 //            startActivity(new Intent(this, LoginActivity.class));
 
-            ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-            Call<ResponseBody> call = apiService.register("0"+response.getData().getUserId().substring(1),"123456");
+            ApiService apiService = RetrofitClient.getSipInstance().create(ApiService.class);
+            Call<ResponseBody> call = apiService.registerSipAccount("0"+response.getData().getUserId().substring(1),"123456");
 
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         Toast.makeText(RegisterActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        Log.i("sip",response.message());
                     } else {
                         Toast.makeText(RegisterActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        Log.i("sip",response.message());
                     }
                 }
 
