@@ -27,6 +27,7 @@ import com.example.text.retrofits.RetrofitClient;
 
 import java.io.ByteArrayInputStream;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -168,6 +169,26 @@ public class RegisterActivity extends AppCompatActivity {
 
             Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show();
 //            startActivity(new Intent(this, LoginActivity.class));
+
+            ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+            Call<ResponseBody> call = apiService.register("0"+response.getData().getUserId().substring(1),"123456");
+
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Toast.makeText(RegisterActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    Toast.makeText(RegisterActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             finish();
         } else {
             Toast.makeText(this, "网络错误", Toast.LENGTH_SHORT).show();

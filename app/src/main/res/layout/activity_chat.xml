@@ -71,6 +71,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- 🔹 语音通话按钮 -->
+        <ImageButton
+            android:id="@+id/btn_audio_call"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_call_voice"
+            android:contentDescription="语音通话"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="4dp" />
+
+        <!-- 🔹 视频通话按钮 -->
+        <ImageButton
+            android:id="@+id/btn_video_call"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_call_video"
+            android:contentDescription="视频通话"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_audio_call"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- 🔻 输入框 -->
         <EditText
             android:id="@+id/et_input"
             android:layout_width="0dp"
@@ -80,12 +106,13 @@
             android:padding="12dp"
             android:inputType="textMultiLine"
             android:maxLines="4"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_video_call"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_send"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_weight="1" />
 
+        <!-- 发送按钮 -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send"
             android:layout_width="wrap_content"
@@ -96,10 +123,11 @@
             app:icon="@android:drawable/ic_menu_send"
             app:iconPadding="8dp"
             app:backgroundTint="@color/light_blue"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_input"
+            app:layout_constraintBottom_toBottomOf="@id/et_input"
             app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

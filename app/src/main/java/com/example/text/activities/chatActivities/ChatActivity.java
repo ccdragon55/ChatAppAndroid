@@ -1,13 +1,16 @@
 package com.example.text.activities.chatActivities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +40,10 @@ import com.example.text.database.ChatMessageModel;
 import com.example.text.database.ChatSessionModel;
 import com.example.text.database.DBManager;
 import com.example.text.retrofits.RetrofitClient;
+import com.example.text.sip.LinphoneManager;
+import com.example.text.sip.test.IncomingCallActivity;
 import com.example.text.utils.ChatInputUtils;
+import com.example.text.utils.Constants;
 import com.example.text.utils.DateUtils;
 import com.example.text.utils.JsonUtils;
 import com.example.text.utils.Store;
@@ -43,6 +51,7 @@ import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.linphone.core.TransportType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +65,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
+    private static final int PERMISSION_REQUEST_CODE = 100;
     private Intent intent;
 //    private Button buttonBack;
     private ImageButton buttonBack;
@@ -80,6 +90,7 @@ public class ChatActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private DBManager dbManager;
     private ChatSessionModel chatSessionModel;
+    private String sipUserName,sipPassword,friendSipAddress;
 
 //    private BroadcastReceiver groupReceiver = new BroadcastReceiver() {
 //        @Override
@@ -243,6 +254,49 @@ public class ChatActivity extends AppCompatActivity {
 
         buttonSend = findViewById(R.id.btn_send);
         buttonSend.setOnClickListener(v->sendMessage());
+
+        // sip部分
+        // 请求权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA
+            }, PERMISSION_REQUEST_CODE);
+        }
+
+        // 拨号按钮
+        ImageButton audioCallButton = findViewById(R.id.btn_audio_call);
+        ImageButton videoCallButton = findViewById(R.id.btn_video_call);
+
+        sipUserName = "0"+userId.substring(1);
+        sipPassword = "123456";
+        friendSipAddress = "0"+contactId.substring(1)+"@"+ Constants.SIP_URL;
+        initializeLinphone();
+
+        audioCallButton.setOnClickListener(v -> {
+            //initializeLinphone();
+            if (!friendSipAddress.isEmpty()) {
+                LinphoneManager.getInstance(getApplicationContext()).makeCall(friendSipAddress, false);
+                Intent intent = new Intent(this, IncomingCallActivity.class);
+                intent.putExtra("remoteAddress", friendSipAddress);
+                intent.putExtra("isVideoCall", false);// 是否是视频通话
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        videoCallButton.setOnClickListener(v -> {
+            //initializeLinphone();
+            if (!friendSipAddress.isEmpty()) {
+                LinphoneManager.getInstance(getApplicationContext()).makeCall(friendSipAddress, true);
+                Intent intent = new Intent(this, IncomingCallActivity.class);
+                intent.putExtra("remoteAddress", friendSipAddress);
+                intent.putExtra("isVideoCall", true);// 是否是视频通话
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -355,5 +409,20 @@ public class ChatActivity extends AppCompatActivity {
 
     private boolean notSameDate(int index) {
         return index == 0 || !Objects.equals(messageList.get(index).getDate(), messageList.get(index-1).getDate());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            initializeLinphone();
+        }
+    }
+
+    private void initializeLinphone() {
+        // 初始化 Linphone 并注册
+        LinphoneManager manager = LinphoneManager.getInstance(getApplicationContext());
+        //manager.createProxyConfig("your_username", "your_password", "10.129.156.163:5060", TransportType.Udp);
+        manager.createProxyConfig(sipUserName, sipPassword, "10.129.156.163", TransportType.Udp);
     }
 }

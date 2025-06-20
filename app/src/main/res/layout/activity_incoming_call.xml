@@ -2,26 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center">
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="用户头像"
+        android:elevation="4dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/CircleImageView"
+        app:strokeColor="@color/primary_light"
+        app:strokeWidth="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/caller_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Incoming Call"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_gravity="center"/>
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/card_background"
+        android:layout_gravity="center" />
 
     <Button
         android:id="@+id/accept_call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept" />
+        android:text="接听" />
 
     <Button
         android:id="@+id/decline_call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Decline" />
+        android:text="挂断" />
 </LinearLayout>

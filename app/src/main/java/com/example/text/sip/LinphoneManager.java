@@ -66,6 +66,7 @@ public class LinphoneManager {
                 if (state == Call.State.IncomingReceived) {
                     Intent intent = new Intent(context, IncomingCallActivity.class);
                     intent.putExtra("remoteAddress", call.getRemoteAddress().asString());
+                    intent.putExtra("isVideoCall", call.getCurrentParams().isVideoEnabled());// 是否是视频通话
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 } else if (state == Call.State.Connected) {

@@ -1,8 +1,12 @@
 package com.example.text.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.example.text.R;
@@ -10,6 +14,7 @@ import com.example.text.activities.loginActivities.LoginActivity;
 import com.example.text.sip.test.SipMainActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int PERMISSION_REQUEST_CODE = 100;
 //    private Button gotoGreetingPageBtn;
 //    private Button gotoMenuTestBtn;
 //    private Button loginBtn;
@@ -20,14 +25,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA
+            }, PERMISSION_REQUEST_CODE);
+        }
+
         //原版
-//        Intent intent=new Intent();
-//        intent.setClass(MainActivity.this, LoginActivity.class);
-//        startActivity(intent);
-        //sip测试版
         Intent intent=new Intent();
-        intent.setClass(MainActivity.this, SipMainActivity.class);
+        intent.setClass(MainActivity.this, LoginActivity.class);
         startActivity(intent);
+        //sip测试版
+//        Intent intent=new Intent();
+//        intent.setClass(MainActivity.this, SipMainActivity.class);
+//        startActivity(intent);
 
 //        gotoGreetingPageBtn=(Button)findViewById(R.id.gotoGreetingPageBtn);
 //        gotoMenuTestBtn=(Button)findViewById(R.id.gotoMenuTestBtn);
