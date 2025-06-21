@@ -59,7 +59,12 @@ public class IncomingCallActivity extends AppCompatActivity {
                 try {
                     call.setCameraEnabled(true);
                     call.accept();
-                    startActivity(new Intent(this, CallActivity.class));
+                    Intent intent = new Intent(this, CallActivity.class);
+                    intent.putExtra("remoteAddress", remoteAddress);
+                    intent.putExtra("isVideoCall", isVideoCall);// 是否是视频通话
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+//                    startActivity(new Intent(this, CallActivity.class));
                     finish();
                 } catch (Exception e) {
                     e.printStackTrace();

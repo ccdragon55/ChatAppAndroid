@@ -41,6 +41,7 @@ import com.example.text.database.ChatSessionModel;
 import com.example.text.database.DBManager;
 import com.example.text.retrofits.RetrofitClient;
 import com.example.text.sip.LinphoneManager;
+import com.example.text.sip.test.CallActivity;
 import com.example.text.sip.test.IncomingCallActivity;
 import com.example.text.utils.ChatInputUtils;
 import com.example.text.utils.Constants;
@@ -278,7 +279,7 @@ public class ChatActivity extends AppCompatActivity {
             //initializeLinphone();
             if (!friendSipAddress.isEmpty()) {
                 LinphoneManager.getInstance(getApplicationContext()).makeCall(friendSipAddress, false);
-                Intent intent = new Intent(this, IncomingCallActivity.class);
+                Intent intent = new Intent(this, CallActivity.class);
                 intent.putExtra("remoteAddress", friendSipAddress);
                 intent.putExtra("isVideoCall", false);// 是否是视频通话
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -290,7 +291,7 @@ public class ChatActivity extends AppCompatActivity {
             //initializeLinphone();
             if (!friendSipAddress.isEmpty()) {
                 LinphoneManager.getInstance(getApplicationContext()).makeCall(friendSipAddress, true);
-                Intent intent = new Intent(this, IncomingCallActivity.class);
+                Intent intent = new Intent(this, CallActivity.class);
                 intent.putExtra("remoteAddress", friendSipAddress);
                 intent.putExtra("isVideoCall", true);// 是否是视频通话
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

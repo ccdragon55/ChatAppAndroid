@@ -2,7 +2,10 @@ package com.example.text.sip;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.text.sip.test.IncomingCallActivity;
 
@@ -15,6 +18,13 @@ public class LinphoneManager {
     private static LinphoneManager instance;
     private Core core;
     private Context context;
+
+    public static final String ACTION_CALL_STATE_CHANGED = "call_state_changed";
+    public static final String EXTRA_CALL_OUTGOINGINIT = "call_outgoingInit";
+    public static final String EXTRA_CALL_OUTGOINGPROGRESS = "call_outgoingProgress";
+    public static final String EXTRA_CALL_CONNECTED = "call_connected";
+    public static final String EXTRA_CALL_STREAMSRUNNING = "call_streamsRunning";
+    public static final String EXTRA_CALL_END_OR_RELEASED = "call_end_or_released";
 
     private LinphoneManager(Context context) {
         this.context = context;
@@ -39,7 +49,7 @@ public class LinphoneManager {
         for (PayloadType codec : core.getVideoPayloadTypes()) {
             if (codec.getMimeType().equals("H264") || codec.getMimeType().equals("VP8")) {
                 codec.enable(true);
-                Log.d("Linphone", "Enabled codec: " + codec.getMimeType());
+                Log.d("LinphoneManager", "Enabled codec: " + codec.getMimeType());
             } else {
                 codec.enable(false);
             }
@@ -58,21 +68,45 @@ public class LinphoneManager {
         core.addListener(new CoreListenerStub() {
             @Override
             public void onAccountRegistrationStateChanged(Core core, Account account, RegistrationState state, String message) {
-                Log.i("Linphone", "Account registration state: " + state + ", message: " + message);
+                Log.i("LinphoneManager", "Account registration state: " + state + ", message: " + message);
             }
 
             @Override
             public void onCallStateChanged(Core core, Call call, Call.State state, String message) {
+                // 发送广播
+                Intent broadcastIntent = new Intent(ACTION_CALL_STATE_CHANGED);
                 if (state == Call.State.IncomingReceived) {
-                    Intent intent = new Intent(context, IncomingCallActivity.class);
-                    intent.putExtra("remoteAddress", call.getRemoteAddress().asString());
-                    intent.putExtra("isVideoCall", call.getCurrentParams().isVideoEnabled());// 是否是视频通话
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                } else if (state == Call.State.Connected) {
-                    Log.i("Linphone", "Call connected!");
-                } else if (state == Call.State.End || state == Call.State.Released) {
-                    Log.i("Linphone", "Call ended: " + message);
+                    Log.i("LinphoneManager", call.getDir().toString());
+                    if(call.getDir()==Call.Dir.Incoming){
+                        Log.i("LinphoneManager", call.getDir().toString());
+                        Log.i("LinphoneManager", "call.getRemoteAddress().asString():"+call.getRemoteAddress().asString());
+                        Log.i("LinphoneManager", "call.getCurrentParams().isVideoEnabled():"+call.getCurrentParams().isVideoEnabled());
+                        Intent intent = new Intent(context, IncomingCallActivity.class);
+                        intent.putExtra("remoteAddress", call.getRemoteAddress().asString());
+                        intent.putExtra("isVideoCall", call.getCurrentParams().isVideoEnabled());// 是否是视频通话
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                }else if (state == Call.State.OutgoingInit) {
+                    Log.i("LinphoneManager", "Call OutgoingInit!");
+                    broadcastIntent.putExtra("callStatus",EXTRA_CALL_OUTGOINGINIT);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                }else if (state == Call.State.OutgoingProgress) {
+                    Log.i("LinphoneManager", "Call OutgoingProgress!");
+                    broadcastIntent.putExtra("callStatus",EXTRA_CALL_OUTGOINGPROGRESS);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                }else if (state == Call.State.Connected) {
+                    Log.i("LinphoneManager", "Call connected!");
+                    broadcastIntent.putExtra("callStatus",EXTRA_CALL_CONNECTED);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                }else if (state == Call.State.StreamsRunning) {
+                    Log.i("LinphoneManager", "Call StreamsRunning: " + message);
+                    broadcastIntent.putExtra("callStatus",EXTRA_CALL_STREAMSRUNNING);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                }else if (state == Call.State.End || state == Call.State.Released) {
+                    Log.i("LinphoneManager", "Call ended: " + message);
+                    broadcastIntent.putExtra("callStatus",EXTRA_CALL_END_OR_RELEASED);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
                 }
             }
         });
@@ -144,7 +178,7 @@ public class LinphoneManager {
             if (LinphoneUtils.checkIfNetworkHasLowBandwidth(context)) {
                 core.setUploadBandwidth(512); // 设置上行带宽限制（kbps）
                 core.setDownloadBandwidth(512); // 设置下行带宽限制（kbps）
-                Log.w("Linphone", "Setting low bandwidth limits!");
+                Log.w("LinphoneManager", "Setting low bandwidth limits!");
             } else {
                 core.setUploadBandwidth(0); // 0 表示无限制
                 core.setDownloadBandwidth(0);

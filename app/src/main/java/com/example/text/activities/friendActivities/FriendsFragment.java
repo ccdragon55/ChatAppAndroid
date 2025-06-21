@@ -99,6 +99,7 @@ public class FriendsFragment extends Fragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction("ACTION_WS_addNewFriend");
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(wsReceiver, filter);
+        fetchContacts();
     }
 
     @Override

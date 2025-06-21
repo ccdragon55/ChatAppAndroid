@@ -69,6 +69,7 @@ public class ChatListFragment extends Fragment {
             }
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         private void handleReceiveMessage(String json) throws JSONException {
             JSONObject jsonObject=new JSONObject(json);
             Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
@@ -77,13 +78,16 @@ public class ChatListFragment extends Fragment {
             if(messageType==0){
                 loadChatSession();
             }
+            adapter.notifyDataSetChanged();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         private void handleReceiveNewSession(String json) throws JSONException {
             JSONObject jsonObject=new JSONObject(json);
             Map<String,Object> message= JsonUtils.jsonToStrObjMap(jsonObject);
             sessionList.add(new SessionListItem(message));
             SessionListItem.sortByLastReceiveTime(sessionList);
+            adapter.notifyDataSetChanged();
         }
 
         @SuppressLint("NotifyDataSetChanged")
@@ -114,8 +118,10 @@ public class ChatListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         private void handleChangeGroupNameReturn() {
             loadChatSession();
+            adapter.notifyDataSetChanged();
         }
     };
 

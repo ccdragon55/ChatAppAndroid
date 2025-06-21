@@ -51,7 +51,12 @@ public class SessionListItem {
         this.memberCount = (memberCountValue instanceof Long) ? ((Long) memberCountValue).intValue() : 1;
         Object topTypeValue = map.getOrDefault("topType", 0);
         this.topType = (topTypeValue instanceof Long) ? ((Long) topTypeValue).intValue() : 0;
-        this.avatarUrl = Objects.toString(map.get("avatarUrl"), "");
+        if(map.containsKey("avatarUrl")){
+            this.avatarUrl = Objects.toString(map.get("avatarUrl"), "");
+        }else if(map.containsKey("url")){
+            this.avatarUrl = Objects.toString(map.get("url"), "");
+        }
+
     }
 
     public String getUserId() {
