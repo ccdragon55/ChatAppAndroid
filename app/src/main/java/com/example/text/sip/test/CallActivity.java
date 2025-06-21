@@ -132,6 +132,7 @@ public class CallActivity extends AppCompatActivity {
         core.addListener(new CoreListenerStub() {
             @Override
             public void onCallStateChanged(Core core, Call call, Call.State state, String message) {
+                Log.i("Call", state.toString());
                 if (state == Call.State.OutgoingInit) {
                     runOnUiThread(() -> {
                         textViewInfo.setText("正在拨号...");

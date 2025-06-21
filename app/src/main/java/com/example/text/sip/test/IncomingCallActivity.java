@@ -47,7 +47,7 @@ public class IncomingCallActivity extends AppCompatActivity {
         callerInfo = findViewById(R.id.caller_info);
         String remoteAddress = getIntent().getStringExtra("remoteAddress");
         boolean isVideoCall = getIntent().getBooleanExtra("isVideoCall",false);
-        showCallerInfo("U"+remoteAddress.substring(2,13),isVideoCall);
+        showCallerInfo("U"+remoteAddress.substring(5,16),isVideoCall);
 
         // 接受和拒绝按钮
         Button acceptButton = findViewById(R.id.accept_call);
@@ -57,6 +57,7 @@ public class IncomingCallActivity extends AppCompatActivity {
             Call call = LinphoneManager.getInstance(getApplicationContext()).getCore().getCurrentCall();
             if (call != null) {
                 try {
+                    LinphoneManager.getInstance(this).acceptCall(call, isVideoCall);
                     call.setCameraEnabled(true);
                     call.accept();
                     Intent intent = new Intent(this, CallActivity.class);

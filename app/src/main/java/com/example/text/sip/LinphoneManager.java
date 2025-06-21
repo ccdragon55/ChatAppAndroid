@@ -43,6 +43,16 @@ public class LinphoneManager {
         videoPolicy.setAutomaticallyAccept(true);
         core.setVideoActivationPolicy(videoPolicy);
 
+        core.setRtpBundleEnabled(false); // 禁用 RTP 捆绑，增加兼容性
+
+        // 启用常用音频编解码器
+        for (PayloadType codec : core.getAudioPayloadTypes()) {
+            if (codec.getMimeType().equals("opus") || codec.getMimeType().equals("PCMU") || codec.getMimeType().equals("PCMA")) {
+                codec.enable(true);
+                Log.d("LinphoneManager", "Enabled audio codec: " + codec.getMimeType());
+            }
+        }
+
         // 启用常用视频编解码器
         for (PayloadType codec : core.getVideoPayloadTypes()) {
             if (codec.getMimeType().equals("H264") || codec.getMimeType().equals("VP8")) {
@@ -75,6 +85,7 @@ public class LinphoneManager {
                 Intent broadcastIntent = new Intent(ACTION_CALL_STATE_CHANGED);
                 if (state == Call.State.IncomingReceived && call.getDir() == Call.Dir.Incoming) {
                     Log.i("LinphoneManager", "Incoming call from: " + call.getRemoteAddress().asString());
+                    Log.i("LinphoneManager", "Is audio call: " + call.getCurrentParams().isAudioEnabled());
                     Log.i("LinphoneManager", "Is video call: " + call.getCurrentParams().isVideoEnabled());
                     Intent intent = new Intent(context, IncomingCallActivity.class);
                     intent.putExtra("remoteAddress", call.getRemoteAddress().asString());
@@ -95,6 +106,8 @@ public class LinphoneManager {
                     LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
                 } else if (state == Call.State.StreamsRunning) {
                     Log.i("LinphoneManager", "Call StreamsRunning: " + message);
+                    Log.i("LinphoneManager", "StreamsRunning Is audio enabled: " + call.getCurrentParams().isAudioEnabled());
+                    Log.i("LinphoneManager", "StreamsRunning Is video enabled: " + call.getCurrentParams().isVideoEnabled());
                     broadcastIntent.putExtra("callStatus", EXTRA_CALL_STREAMSRUNNING);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
                 } else if (state == Call.State.End || state == Call.State.Released) {
@@ -164,10 +177,14 @@ public class LinphoneManager {
         try {
             Address addressToCall = Factory.instance().createAddress("sip:" + destination);
             CallParams params = core.createCallParams(null);
+            params.setAudioEnabled(true);
             params.setVideoEnabled(isVideoCall);
             if (isVideoCall) {
+                Log.i("LinphoneManager", "true");
                 params.setVideoDirection(MediaDirection.SendRecv);
                 params.setEarlyMediaSendingEnabled(true);
+            }else{
+                Log.i("LinphoneManager", "false");
             }
 
             // 优化低带宽网络
@@ -180,9 +197,30 @@ public class LinphoneManager {
                 core.setDownloadBandwidth(0);
             }
 
-            core.inviteAddressWithParams(addressToCall, params);
+            Call call =core.inviteAddressWithParams(addressToCall, params);
+            if (call != null) {
+                Log.i("LinphoneManager", "Call initiated, audio enabled: " + call.getCurrentParams().isAudioEnabled());
+                Log.i("LinphoneManager", "Call initiated, video enabled: " + call.getCurrentParams().isVideoEnabled());
+            }
         } catch (Exception e) {
             Log.e("LinphoneManager", "Error making call", e);
+        }
+    }
+
+    public void acceptCall(Call call, boolean enableVideo) {
+        try {
+            CallParams params = core.createCallParams(call);
+            params.setAudioEnabled(true); // 强制启用音频
+            params.setVideoEnabled(enableVideo);
+            call.setCameraEnabled(true);
+            if (enableVideo) {
+                params.setVideoDirection(MediaDirection.SendRecv);
+                Log.i("LinphoneManager", "Accepting call with video enabled");
+            }
+            call.acceptWithParams(params);
+            Log.i("LinphoneManager", "Call accepted, audio enabled: " + call.getCurrentParams().isAudioEnabled());
+        } catch (Exception e) {
+            Log.e("LinphoneManager", "Error accepting call", e);
         }
     }
 

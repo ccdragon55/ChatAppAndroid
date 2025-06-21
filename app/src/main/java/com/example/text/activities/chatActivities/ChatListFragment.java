@@ -150,6 +150,7 @@ public class ChatListFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 1. 加载 Fragment 的布局
@@ -183,6 +184,7 @@ public class ChatListFragment extends Fragment {
             sessionList.get(position).setNoReadCount(0);
             chatSessionModel.clearNoReadCount(sessionListItem.getSessionId());
         });
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
 
         return rootView;
