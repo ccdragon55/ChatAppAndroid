@@ -43,19 +43,25 @@ public class CallActivity extends AppCompatActivity {
 
                 if (Objects.equals(callStatus, LinphoneManager.EXTRA_CALL_OUTGOINGINIT)) {
                     Log.i("Call", "EXTRA_CALL_OUTGOINGINIT");
-                    textViewInfo.setText("正在拨号...");
+                    runOnUiThread(() -> {
+                        textViewInfo.setText("正在拨号...");
+                    });
                 }else if (Objects.equals(callStatus, LinphoneManager.EXTRA_CALL_OUTGOINGPROGRESS)) {
                     Log.i("Call", "EXTRA_CALL_OUTGOINGPROGRESS");
-                    textViewInfo.setText("对方响铃中...");
+                    runOnUiThread(() -> {
+                        textViewInfo.setText("对方响铃中...");
+                    });
                 }else if (Objects.equals(callStatus, LinphoneManager.EXTRA_CALL_CONNECTED)) {
                     Log.i("Call", "EXTRA_CALL_CONNECTED");
-                    textViewInfo.setText("对方已接听...");
                     runOnUiThread(() -> {
+                        textViewInfo.setText("对方已接听...");
                         chronometer.setBase(SystemClock.elapsedRealtime());
                         chronometer.start();
                     });
                 }else if (Objects.equals(callStatus, LinphoneManager.EXTRA_CALL_STREAMSRUNNING)) {
-                    textViewInfo.setText("通话中...");
+                    runOnUiThread(() -> {
+                        textViewInfo.setText("通话中...");
+                    });
                     Log.i("Call", "Media streams are running (audio + video)");
                 }else if (Objects.equals(callStatus, LinphoneManager.EXTRA_CALL_END_OR_RELEASED)) {
                     Log.i("Call", "end");
@@ -127,20 +133,28 @@ public class CallActivity extends AppCompatActivity {
             @Override
             public void onCallStateChanged(Core core, Call call, Call.State state, String message) {
                 if (state == Call.State.OutgoingInit) {
-                    textViewInfo.setText("正在拨号...");
+                    runOnUiThread(() -> {
+                        textViewInfo.setText("正在拨号...");
+                    });
                 }
                 if (state == Call.State.OutgoingProgress) {
-                    textViewInfo.setText("对方响铃中...");
+                    runOnUiThread(() -> {
+                        textViewInfo.setText("对方响铃中...");
+                    });
                 }
                 if (state == Call.State.Connected) {
-                    textViewInfo.setText("对方已接听...");
                     runOnUiThread(() -> {
+                        textViewInfo.setText("对方已接听...");
                         chronometer.setBase(SystemClock.elapsedRealtime());
                         chronometer.start();
                     });
                 }
                 if (state == Call.State.StreamsRunning) {
-                    textViewInfo.setText("通话中...");
+                    runOnUiThread(() -> {
+                        textViewInfo.setText("通话中...");
+                        chronometer.setBase(SystemClock.elapsedRealtime());
+                        chronometer.start();
+                    });
                     Log.i("Call", "Media streams are running (audio + video)");
                     if (call.getCurrentParams().isVideoEnabled()) {
                         Log.i("Call", "Video is enabled in call!");
